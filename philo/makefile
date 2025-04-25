@@ -1,12 +1,12 @@
 NAME = philo
 CFLAGS = -g -Werror -Wextra -Werror
 CC = cc
-OBJ = main.o
+OBJ = philo.o philo_helper.o
 
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-%.o : %.c
+%.o : %.c philo.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean :
