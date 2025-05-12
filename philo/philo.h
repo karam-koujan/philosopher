@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/12 16:20:15 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/12 17:16:43 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,12 @@ typedef struct s_data {
     int				philo_died;
     t_philo			**philosophers;
 	pthread_mutex_t	*forks;
-
 }				t_data;
+
+typedef struct s_philo_data
+{
+    t_data  *data;
+    t_philo *philo;
+}               t_philo_data;
 
 #endif
