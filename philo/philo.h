@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/12 11:03:16 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/12 16:20:15 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ typedef struct	s_philo
 	struct s_philo	*right;
 	pthread_t		thread;
 	pthread_mutex_t	arg_lock;
-	pthread_mutex_t	fork;
 }				t_philo;
 
 typedef struct s_data {
@@ -42,6 +41,8 @@ typedef struct s_data {
     long			start_time;
     int				philo_died;
     t_philo			**philosophers;
+	pthread_mutex_t	*forks;
+
 }				t_data;
 
 #endif
