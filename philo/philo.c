@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/09 20:58:04 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/12 11:22:11 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,49 @@ int	validate_arg(int ac, char **av)
 	}
 	return (1);
 }
+void	init_philo(t_data **td, t_philo *philo)
+{
+	
+}
+
+void	*monitor_routine(void *data)
+{
+	t_data	*td;
+	t_philo	*philo;
+	int		i;
+
+	i = -1;
+	td = data;
+	philo = NULL;
+	init_philo(&td, &philo);
+	if (!philo)
+		return (NULL);
+	// initialize philos
+	return (td);
+}
 
 int	main(int ac, char **av)
 {
+	t_data		*data;
+	pthread_t	monitor;
+
 	if (ac != 5 && ac != 6)
 		return (write(2, "BAD ARG", 7), 1);
 	if (!validate_arg(ac, av))
 		return (write(2, "BAD ARG", 7), 1);
-	
+	data = malloc(sizeof(t_data));
+	if (!data)
+		return (1);
+	data->num_philos = ft_atoi(av[1]);
+	data->time_to_die = ft_atoi(av[2]);
+	data->time_to_eat = ft_atoi(av[3]);
+	data->time_to_sleep = ft_atoi(av[4]);
+	if (ac == 6)
+		data->eat_num = ft_atoi(av[5]);
+	data->philo_died = 0;
+	if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
+		return (printf("error in creating thread"), 1);
+	if (pthread_join(monitor, NULL) != 0)
+		return (printf("error in creating thread"), 1);
+
 }

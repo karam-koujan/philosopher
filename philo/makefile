@@ -3,6 +3,7 @@ CFLAGS = -g -Werror -Wextra -Werror
 CC = cc
 OBJ = philo.o philo_helper.o
 
+all : $(NAME)
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
@@ -14,3 +15,5 @@ clean :
 
 fclean : clean
 	rm -f $(NAME)
+
+re : fclean all
