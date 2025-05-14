@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/12 18:37:48 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/14 15:55:19 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,11 +123,40 @@ void	start_simulation(t_data *data)
 	}
 }
 
+int	get_passed_time(t_time *prev, t_time *curr)
+{
+	long	time;
+
+	time = (curr->tv_sec - prev->tv_sec) * 1000000 + (curr->tv_usec - prev->tv_usec);
+	return (time);
+}
+
+int	usleep_wrapper(int duration)
+{
+	t_time		curr;
+	t_time		prev;
+	long		rest;
+
+	if (gettimeofday(&prev, NULL))
+		return (-1);
+	rest = 0;
+	while (rest <= duration)
+	{
+		if (gettimeofday(&curr, NULL))
+			return (-1);
+		rest = get_passed_time(&prev, &curr);
+		if (rest > 20000)
+			usleep(rest / 2);
+	}
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_data		*data;
 	pthread_t	monitor;
-
+	t_time		curr;
+	t_time		prev;
 	if (ac != 5 && ac != 6)
 		return (write(2, "BAD ARG", 7), 1);
 	if (!validate_arg(ac, av))
@@ -141,9 +170,13 @@ int	main(int ac, char **av)
 		data->eat_num = ft_atoi(av[5]);
 	data->philo_died = 0;
 	data->philosophers = init_philosophers(data);
-	start_simulation(data);
-	if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
-		return (printf("error in creating thread"), 1);
-	if (pthread_join(monitor, NULL) != 0)
-		return (printf("error in creating thread"), 1);
+	// start_simulation(data);
+	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
+	// 	return (printf("error in creating thread"), 1);
+	// if (pthread_join(monitor, NULL) != 0)
+	// 	return (printf("error in creating thread"), 1);
+	gettimeofday(&prev, NULL);
+	usleep_wrapper(300);
+	gettimeofday(&curr, NULL);
+	printf("%i\n", get_passed_time(&prev, &curr));
 }
