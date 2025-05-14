@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/14 15:55:19 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/14 16:18:37 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,12 +151,29 @@ int	usleep_wrapper(int duration)
 	return (0);
 }
 
+pthread_mutex_t	*init_forks(int	forks_num)
+{
+	pthread_mutex_t	*forks;
+	int				i;
+
+	i = -1;
+	forks = malloc(forks_num * sizeof(pthread_mutex_t));
+	if (!forks)
+		return (NULL);
+	while (++i < forks_num)
+	{
+		if (pthread_mutex_init(&forks[i], NULL) == -1)
+			return (NULL);
+	}
+}
+
 int	main(int ac, char **av)
 {
 	t_data		*data;
 	pthread_t	monitor;
 	t_time		curr;
 	t_time		prev;
+
 	if (ac != 5 && ac != 6)
 		return (write(2, "BAD ARG", 7), 1);
 	if (!validate_arg(ac, av))
@@ -170,6 +187,9 @@ int	main(int ac, char **av)
 		data->eat_num = ft_atoi(av[5]);
 	data->philo_died = 0;
 	data->philosophers = init_philosophers(data);
+	data->forks = init_forks(data->num_philos);
+	if (!data->philosophers || !data->forks)
+		return (printf("something went wrong!"), 1);
 	// start_simulation(data);
 	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 	// 	return (printf("error in creating thread"), 1);
