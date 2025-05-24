@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/24 18:25:23 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/24 18:42:45 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,9 +120,11 @@ void	*philo_func(void *data)
 	philo_data = data;
 	
 	pthread_mutex_lock(get_fork(philo_data, 0));
-	printf("%ld	%i has taken a fork\n", get_timestamp(philo_data->data->start_time) ,philo_data->philo->id);
+	pthread_mutex_lock(&(philo_data->data->print_lock));
+	printf("%ld	%i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
 	pthread_mutex_lock(get_fork(philo_data, 1));
 	printf("%ld %i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
+	usleep_wrapper(philo_data->data->time_to_eat, philo_data->data->philo_died);
 	return (NULL);
 }
 
@@ -134,7 +136,7 @@ int	get_passed_time(t_time *prev, t_time *curr)
 	return (time);
 }
 
-int	usleep_wrapper(int duration)
+int	usleep_wrapper(int duration, int is_dead)
 {
 	t_time		curr;
 	t_time		prev;
@@ -143,7 +145,7 @@ int	usleep_wrapper(int duration)
 	if (gettimeofday(&prev, NULL))
 		return (-1);
 	rest = 0;
-	while (rest <= duration)
+	while (rest <= duration && !is_dead)
 	{
 		if (gettimeofday(&curr, NULL))
 			return (-1);

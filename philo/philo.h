@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/24 18:31:25 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/24 18:39:10 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,5 +55,5 @@ typedef struct s_philo_data
 typedef struct timeval	t_time;
 long	get_timestamp(long start_time);
 long	gettimeofday_wrapper(void);
-int	usleep_wrapper(int duration);
+int	usleep_wrapper(int duration, int is_dead);
 #endif
