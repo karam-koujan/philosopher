@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/24 18:42:45 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/24 18:49:27 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,13 @@ void	*philo_func(void *data)
 	pthread_mutex_lock(get_fork(philo_data, 0));
 	pthread_mutex_lock(&(philo_data->data->print_lock));
 	printf("%ld	%i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
+	pthread_mutex_unlock(&(philo_data->data->print_lock));
+	pthread_mutex_unlock(get_fork(philo_data, 0));
 	pthread_mutex_lock(get_fork(philo_data, 1));
+	pthread_mutex_lock(&(philo_data->data->print_lock));
 	printf("%ld %i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
+	pthread_mutex_unlock(&(philo_data->data->print_lock));
+	pthread_mutex_unlock(get_fork(philo_data, 0));
 	usleep_wrapper(philo_data->data->time_to_eat, philo_data->data->philo_died);
 	return (NULL);
 }
