@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/16 18:31:56 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/24 18:25:23 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,13 +104,25 @@ pthread_mutex_t	*get_fork(t_philo_data *philo_data, int fork_pos)
 	return (&forks[(idx + 1) % philo_num]);
 }
 
+long	get_timestamp(long start_time)
+{
+	long	time;
+
+	time = gettimeofday_wrapper();
+	if (time == -1)
+		return (-1);
+	return (time - start_time);
+}
+
 void	*philo_func(void *data)
 {
 	t_philo_data	*philo_data;
 	philo_data = data;
+	
 	pthread_mutex_lock(get_fork(philo_data, 0));
+	printf("%ld	%i has taken a fork\n", get_timestamp(philo_data->data->start_time) ,philo_data->philo->id);
 	pthread_mutex_lock(get_fork(philo_data, 1));
-	printf("philoooo\n");
+	printf("%ld %i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
 	return (NULL);
 }
 
@@ -121,6 +133,7 @@ int	get_passed_time(t_time *prev, t_time *curr)
 	time = (curr->tv_sec - prev->tv_sec) * 1000000 + (curr->tv_usec - prev->tv_usec);
 	return (time);
 }
+
 int	usleep_wrapper(int duration)
 {
 	t_time		curr;
@@ -135,10 +148,19 @@ int	usleep_wrapper(int duration)
 		if (gettimeofday(&curr, NULL))
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
-		if (rest > 20000)
-			usleep(rest / 2);
+		// if (rest > 20000)
+		// 	usleep(rest / 2);
 	}
 	return (0);
+}
+
+long	gettimeofday_wrapper(void)
+{
+	t_time	time;
+
+	if (gettimeofday(&time, NULL))
+		return (-1);
+	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
 }
 void	start_simulation(t_data *data)
 {
@@ -148,6 +170,7 @@ void	start_simulation(t_data *data)
 
 	i = -1;
 	philo_data.data = data;
+	philo_data.data->start_time = gettimeofday_wrapper();
 	while (++i < data->num_philos)
 	{
 		philo = init_philo(i + 1);
@@ -167,8 +190,6 @@ void	start_simulation(t_data *data)
 			printf("error in joining threads");
 	}
 }
-
-
 
 pthread_mutex_t	*init_forks(int	forks_num)
 {
@@ -216,7 +237,5 @@ int	main(int ac, char **av)
 	// 	return (printf("error in creating thread"), 1);
 	// if (pthread_join(monitor, NULL) != 0)
 	// 	return (printf("error in creating thread"), 1);
-	// gettimeofday(&prev, NULL);
-	// usleep_wrapper(300);
-	// gettimeofday(&curr, NULL);
+	
 }
