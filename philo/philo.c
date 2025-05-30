@@ -6,24 +6,11 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/24 18:49:27 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/30 11:31:29 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-int	is_number(char *nbr)
-{
-	int	i;
-
-	i = -1;
-	while (nbr[++i])
-	{
-		if (!(nbr[i] >= '0' && nbr[i] <= '9'))
-			return (0);
-	}
-	return (1);
-}
 
 int	validate_arg(int ac, char **av)
 {
@@ -38,15 +25,6 @@ int	validate_arg(int ac, char **av)
 			return (0);
 	}
 	return (1);
-}
-void	free_arr(void	**arr)
-{
-	int	i;
-
-	i = -1;
-	while (arr[++i])
-		free(arr[i]);
-	free(arr);
 }
 
 t_philo	**init_philosophers(t_data	*data)
@@ -76,6 +54,7 @@ void	*monitor_routine(void *data)
 	printf("philo routine\n");
 	return (NULL);
 }
+
 t_philo	*init_philo(int id)
 {
 	t_philo	*philo;
@@ -104,71 +83,23 @@ pthread_mutex_t	*get_fork(t_philo_data *philo_data, int fork_pos)
 	return (&forks[(idx + 1) % philo_num]);
 }
 
-long	get_timestamp(long start_time)
-{
-	long	time;
-
-	time = gettimeofday_wrapper();
-	if (time == -1)
-		return (-1);
-	return (time - start_time);
-}
-
 void	*philo_func(void *data)
 {
 	t_philo_data	*philo_data;
+
 	philo_data = data;
-	
 	pthread_mutex_lock(get_fork(philo_data, 0));
-	pthread_mutex_lock(&(philo_data->data->print_lock));
-	printf("%ld	%i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
-	pthread_mutex_unlock(&(philo_data->data->print_lock));
+	print_message(philo_data, 0);
 	pthread_mutex_unlock(get_fork(philo_data, 0));
 	pthread_mutex_lock(get_fork(philo_data, 1));
-	pthread_mutex_lock(&(philo_data->data->print_lock));
-	printf("%ld %i has taken a fork\n", get_timestamp(philo_data->data->start_time), philo_data->philo->id);
-	pthread_mutex_unlock(&(philo_data->data->print_lock));
+	print_message(philo_data, 0);
 	pthread_mutex_unlock(get_fork(philo_data, 0));
 	usleep_wrapper(philo_data->data->time_to_eat, philo_data->data->philo_died);
 	return (NULL);
 }
 
-int	get_passed_time(t_time *prev, t_time *curr)
-{
-	long	time;
 
-	time = (curr->tv_sec - prev->tv_sec) * 1000000 + (curr->tv_usec - prev->tv_usec);
-	return (time);
-}
 
-int	usleep_wrapper(int duration, int is_dead)
-{
-	t_time		curr;
-	t_time		prev;
-	long		rest;
-
-	if (gettimeofday(&prev, NULL))
-		return (-1);
-	rest = 0;
-	while (rest <= duration && !is_dead)
-	{
-		if (gettimeofday(&curr, NULL))
-			return (-1);
-		rest = get_passed_time(&prev, &curr);
-		// if (rest > 20000)
-		// 	usleep(rest / 2);
-	}
-	return (0);
-}
-
-long	gettimeofday_wrapper(void)
-{
-	t_time	time;
-
-	if (gettimeofday(&time, NULL))
-		return (-1);
-	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
-}
 void	start_simulation(t_data *data)
 {
 	int				i;

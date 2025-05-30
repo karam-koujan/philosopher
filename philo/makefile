@@ -1,7 +1,7 @@
 NAME = philo
 CFLAGS = -g -Werror -Wextra -Werror
 CC = cc
-OBJ = philo.o philo_helper.o
+OBJ = philo.o philo_helper.o time.o helper.o
 
 all : $(NAME)
 $(NAME) : $(OBJ)
