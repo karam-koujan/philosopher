@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/30 11:31:12 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/31 15:24:30 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@
 # include <time.h>
 # include <sys/time.h>
 
-int	ft_atoi(const char *str);
-
 typedef struct	s_philo
 {
 	int				id;
@@ -29,8 +27,9 @@ typedef struct	s_philo
 	struct s_philo	*left;
 	struct s_philo	*right;
 	pthread_t		thread;
+	pthread_mutex_t	eat_time_lock;
+	long			eat_time;
 	pthread_mutex_t	arg_lock;
-
 }				t_philo;
 
 typedef struct s_data {
@@ -57,6 +56,7 @@ typedef struct timeval	t_time;
 long	get_timestamp(long start_time);
 long	gettimeofday_wrapper(void);
 int		usleep_wrapper(int duration, int is_dead);
-void	print_message(t_philo_data *philo_data, int type);
+int		print_message(t_philo_data *philo_data, int type);
+int		ft_atoi(const char *str);
 
 #endif

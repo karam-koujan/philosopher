@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/30 11:31:29 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/05/31 15:36:19 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,44 @@ pthread_mutex_t	*get_fork(t_philo_data *philo_data, int fork_pos)
 	return (&forks[(idx + 1) % philo_num]);
 }
 
+int	take_fork(t_philo_data *philo_data)
+{
+	if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
+		return (-1);
+	print_message(philo_data, 0);
+	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
+		return (-1);
+	if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
+		return (-1);
+	print_message(philo_data, 0);
+	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
+		return (-1);
+	return (0);
+}
+
+int	eat(t_philo_data *philo_data)
+{
+	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
+		return (-1);
+	philo_data->philo->eat_time = get_timestamp(philo_data->data->start_time);
+	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
+		return (-1);
+	if (print_message(philo_data, 1) == -1)
+		return (-1);
+	if (usleep_wrapper(philo_data->data->time_to_eat, \
+		philo_data->data->philo_died) == -1)
+		return (-1);
+}
+
 void	*philo_func(void *data)
 {
 	t_philo_data	*philo_data;
 
 	philo_data = data;
-	pthread_mutex_lock(get_fork(philo_data, 0));
-	print_message(philo_data, 0);
-	pthread_mutex_unlock(get_fork(philo_data, 0));
-	pthread_mutex_lock(get_fork(philo_data, 1));
-	print_message(philo_data, 0);
-	pthread_mutex_unlock(get_fork(philo_data, 0));
-	usleep_wrapper(philo_data->data->time_to_eat, philo_data->data->philo_died);
+	if (take_fork(philo_data) == -1)
+		return (NULL);
+	if (eat(philo_data) == -1)
+		return (NULL);
 	return (NULL);
 }
 
@@ -116,7 +142,7 @@ void	start_simulation(t_data *data)
 			return ;
 		philo_data.philo = philo;
 		if ((i + 1) % 2 != 0)
-			usleep_wrapper(data->time_to_eat / 2);
+			usleep_wrapper(200, data->philo_died);
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
@@ -168,6 +194,7 @@ int	main(int ac, char **av)
 	data->philo_died = 0;
 	data->philosophers = init_philosophers(data);
 	data->forks = init_forks(data->num_philos);
+	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
 		return (printf("something went wrong!"), 1);
 	start_simulation(data);
