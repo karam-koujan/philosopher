@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:11:50 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:20:06 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	sleeping(t_philo_data *philo_data)
 {
 	if (print_message(philo_data, 2) == -1)
 		return (-1);
-	if (usleep_wrapper(philo_data->data->time_to_eat, \
+	if (usleep_wrapper(philo_data->data->time_to_sleep, \
 		philo_data->data->philo_died) == -1)
 		return (-1);
 	return (0);
