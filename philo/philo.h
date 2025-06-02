@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/31 15:24:30 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:05:07 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,8 @@ typedef struct	s_philo
 {
 	int				id;
 	int				num_meals_eaten;
-	struct s_philo	*left;
-	struct s_philo	*right;
 	pthread_t		thread;
+	pthread_mutex_t	num_meals_lock;
 	pthread_mutex_t	eat_time_lock;
 	long			eat_time;
 	pthread_mutex_t	arg_lock;
@@ -43,6 +42,7 @@ typedef struct s_data {
 	long			start_time;
 	int				philo_died;
 	t_philo			**philosophers;
+	pthread_t		monitor;
 	pthread_mutex_t	*forks;
 }				t_data;
 
@@ -58,5 +58,7 @@ long	gettimeofday_wrapper(void);
 int		usleep_wrapper(int duration, int is_dead);
 int		print_message(t_philo_data *philo_data, int type);
 int		ft_atoi(const char *str);
+int		is_number(char *nbr);
+void	free_arr(void	**arr);
 
 #endif

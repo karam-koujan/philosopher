@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/31 15:36:19 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:11:50 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,16 +100,39 @@ int	take_fork(t_philo_data *philo_data)
 
 int	eat(t_philo_data *philo_data)
 {
-	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
-		return (-1);
-	philo_data->philo->eat_time = get_timestamp(philo_data->data->start_time);
-	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
-		return (-1);
 	if (print_message(philo_data, 1) == -1)
 		return (-1);
 	if (usleep_wrapper(philo_data->data->time_to_eat, \
 		philo_data->data->philo_died) == -1)
 		return (-1);
+	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
+		return (-1);
+	philo_data->philo->eat_time = get_timestamp(philo_data->data->start_time);
+	if (pthread_mutex_unlock(&philo_data->philo->eat_time_lock) != 0)
+		return (-1);
+	if (pthread_mutex_lock(&philo_data->philo->num_meals_lock) != 0)
+		return (-1);
+	philo_data->philo->num_meals_eaten++;
+	if (pthread_mutex_unlock(&philo_data->philo->num_meals_lock) != 0)
+		return (-1);
+	return (0);
+}
+
+int	sleeping(t_philo_data *philo_data)
+{
+	if (print_message(philo_data, 2) == -1)
+		return (-1);
+	if (usleep_wrapper(philo_data->data->time_to_eat, \
+		philo_data->data->philo_died) == -1)
+		return (-1);
+	return (0);
+}
+
+int	think(t_philo_data *philo_data)
+{
+	if (print_message(philo_data, 3) == -1)
+		return (-1);
+	return (0);
 }
 
 void	*philo_func(void *data)
@@ -121,10 +144,42 @@ void	*philo_func(void *data)
 		return (NULL);
 	if (eat(philo_data) == -1)
 		return (NULL);
+	if (sleeping(philo_data) == -1)
+		return (NULL);
+	if (think(philo_data) == -1)
+		return (NULL);
 	return (NULL);
 }
 
+void	*monitoring(void *data)
+{
+	t_philo_data	*philo_data;
+	int				is_dead;
+	int				i;
+	int				finish_eating;
 
+	philo_data = data;
+	is_dead = 0;
+	i = -1;
+	finish_eating = 1;
+	while (!is_dead)
+	{
+		while (++i < philo_data->data->num_philos)
+		{
+			if (get_timestamp(philo_data->data->start_time) - philo_data->data->philosophers[i]->eat_time >= philo_data->data->time_to_die)
+			{
+				is_dead = 1;
+				if (pthread_mutex_lock(&philo_data->data->death_lock) != 0)
+					return (NULL);
+				philo_data->data->philo_died = 1;
+				if (pthread_mutex_unlock(&philo_data->data->death_lock) != 0)
+					return (NULL);
+			}
+			finish_eating = finish_eating & (philo_data->data->philosophers[i]->num_meals_eaten == philo_data->data->eat_num);
+		}
+	}
+	return (NULL);
+}
 
 void	start_simulation(t_data *data)
 {
@@ -147,6 +202,7 @@ void	start_simulation(t_data *data)
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
 	}
+	if (pthread_create(&data->monitor, NULL, &monitoring, &philo_data))
 	i = -1;
 	while (++i < data->num_philos)
 	{
