@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:28:33 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:41:31 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,14 +140,17 @@ void	*philo_func(void *data)
 	t_philo_data	*philo_data;
 
 	philo_data = data;
-	if (take_fork(philo_data) == -1)
-		return (NULL);
-	if (eat(philo_data) == -1)
-		return (NULL);
-	if (sleeping(philo_data) == -1)
-		return (NULL);
-	if (think(philo_data) == -1)
-		return (NULL);
+	while (!philo_data->data->philo_died)
+	{
+		if (take_fork(philo_data) == -1)
+			return (NULL);
+		if (eat(philo_data) == -1)
+			return (NULL);
+		if (sleeping(philo_data) == -1)
+			return (NULL);
+		if (think(philo_data) == -1)
+			return (NULL);
+	}
 	return (NULL);
 }
 
@@ -175,7 +178,7 @@ void	*monitoring(void *data)
 				if (pthread_mutex_unlock(&philo_data->data->death_lock) != 0)
 					return (NULL);
 			}
-			finish_eating = finish_eating & (philo_data->data->philosophers[i]->num_meals_eaten == philo_data->data->eat_num);
+			// finish_eating = finish_eating & (philo_data->data->philosophers[i]->num_meals_eaten == philo_data->data->eat_num);
 		}
 	}
 	return (NULL);
@@ -202,13 +205,16 @@ void	start_simulation(t_data *data)
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
 	}
-	if (pthread_create(&data->monitor, NULL, &monitoring, &philo_data))
+	if (pthread_create(&data->monitor, NULL, &monitoring, &philo_data) != 0)
+		printf("error in creating thread");
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(data->philosophers[i]->thread, NULL) != 0)
 			printf("error in joining threads");
 	}
+	if (pthread_join(data->monitor, NULL) != 0)
+		printf("error in joining threads");
 }
 
 pthread_mutex_t	*init_forks(int	forks_num)
@@ -253,11 +259,7 @@ int	main(int ac, char **av)
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
 		return (printf("something went wrong!"), 1);
-	printf("as\n");
-	usleep_wrapper(50000, 0);
-	printf("as\n");
-
-	// start_simulation(data);
+	start_simulation(data);
 	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 	// 	return (printf("error in creating thread"), 1);
 	// if (pthread_join(monitor, NULL) != 0)
