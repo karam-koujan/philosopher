@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:20:06 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:28:33 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,7 +253,11 @@ int	main(int ac, char **av)
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
 		return (printf("something went wrong!"), 1);
-	start_simulation(data);
+	printf("as\n");
+	usleep_wrapper(50000, 0);
+	printf("as\n");
+
+	// start_simulation(data);
 	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 	// 	return (printf("error in creating thread"), 1);
 	// if (pthread_join(monitor, NULL) != 0)

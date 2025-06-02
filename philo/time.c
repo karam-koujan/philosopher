@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/05/30 11:12:22 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/02 23:30:23 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,14 +37,16 @@ int	usleep_wrapper(int duration, int is_dead)
 	t_time		prev;
 	long		rest;
 
-	if (gettimeofday(&prev, NULL))
+	if (gettimeofday(&prev, NULL) == -1)
 		return (-1);
 	rest = 0;
 	while (rest <= duration && !is_dead)
 	{
-		if (gettimeofday(&curr, NULL))
+		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
+		if (rest == -1)
+			return (-1);
 	}
 	return (0);
 }
@@ -53,7 +55,7 @@ long	gettimeofday_wrapper(void)
 {
 	t_time	time;
 
-	if (gettimeofday(&time, NULL))
+	if (gettimeofday(&time, NULL) == -1)
 		return (-1);
 	return ((time.tv_sec * 1000) + time.tv_usec / 1000);
 }
