@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 11:59:18 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 13:38:49 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,25 @@ int	print_message(t_philo *philo_data, int type)
 {
 	if (pthread_mutex_lock(&(philo_data->data->print_lock)) != 0)
 		return (-1);
-	if (type == 0)
+	if (pthread_mutex_lock(&(philo_data->data->death_lock)) != 0)
+		return (-1);
+	if (type == 0 && !philo_data->data->philo_died)
 		printf("%ld	%i has taken a fork\n", \
 			get_timestamp(philo_data->data->start_time), philo_data->id);
-	else if (type == 1)
+	else if (type == 1 && !philo_data->data->philo_died)
 		printf("%ld	%i is eating\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
-	else if (type == 2)
+	else if (type == 2 && !philo_data->data->philo_died)
 		printf("%ld	%i is sleeping\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
-	else if (type == 3)
+	else if (type == 3 && !philo_data->data->philo_died)
 		printf("%ld	%i is thinking\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
 	else if (type == 4)
 		printf("%ld	%i died\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
+	if (pthread_mutex_unlock(&(philo_data->data->death_lock)) != 0)
+		return (-1);
 	if (pthread_mutex_unlock(&(philo_data->data->print_lock)) != 0)
 		return (-1);
 	return (0);
