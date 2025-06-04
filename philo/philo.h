@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:20:04 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:36:36 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <time.h>
 # include <sys/time.h>
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int				id;
 	int				num_meals_eaten;
