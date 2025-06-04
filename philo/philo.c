@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 09:07:10 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 09:12:49 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,29 @@ pthread_mutex_t	*get_fork(t_philo *philo_data, int fork_pos)
 
 int	take_fork(t_philo *philo_data)
 {
-	if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
-		return (-1);
-	print_message(philo_data, 0);
-	if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
-		return (-1);
-	print_message(philo_data, 0);
+	int	left_fork_id;
+	int	right_fork_id;
+
+	left_fork_id = philo_data->id - 1;
+	right_fork_id = philo_data->id % philo_data->data->num_philos;
+	if (left_fork_id < right_fork_id)
+	{
+		if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
+			return (-1);
+		print_message(philo_data, 0);
+		if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
+			return (-1);
+		print_message(philo_data, 0);
+	}
+	else
+	{
+		if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
+			return (-1);
+		print_message(philo_data, 0);
+		if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
+			return (-1);
+		print_message(philo_data, 0);
+	}
 	return (0);
 }
 
