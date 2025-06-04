@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:34:44 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 09:06:48 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ int	usleep_wrapper(int duration, int is_dead)
 	t_time		prev;
 	long		rest;
 
+	if (is_dead == -1)
+		return (-1);
 	if (gettimeofday(&prev, NULL) == -1)
 		return (-1);
 	rest = 0;

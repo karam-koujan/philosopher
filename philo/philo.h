@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 07:28:41 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 09:02:10 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ typedef struct	s_philo
 	pthread_mutex_t	num_meals_lock;
 	pthread_mutex_t	eat_time_lock;
 	long			eat_time;
-	t_data			*data;
+	struct s_data	*data;
 	pthread_mutex_t	arg_lock;
 }				t_philo;
 
@@ -57,9 +57,10 @@ typedef struct timeval	t_time;
 long	get_timestamp(long start_time);
 long	gettimeofday_wrapper(void);
 int		usleep_wrapper(int duration, int is_dead);
-int		print_message(t_philo_data *philo_data, int type);
+int		print_message(t_philo *philo_data, int type);
 int		ft_atoi(const char *str);
 int		is_number(char *nbr);
 void	free_arr(void	**arr);
+int		is_dead(t_data *data);
 
 #endif
