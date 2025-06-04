@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:19:30 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:56:57 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,21 @@ t_philo	*init_philo(int id, t_data *data)
 	if (pthread_mutex_init(&philo->eat_time_lock, NULL) != 0)
 		return (free(philo), NULL);
 	return (philo);
+}
+
+void	destroy_philo_mutex(t_philo *data)
+{
+	pthread_mutex_destroy(&data->num_meals_lock);
+	pthread_mutex_destroy(&data->eat_time_lock);
+}
+
+void	destroy_philo_mutex(t_data *data)
+{
+	int	i;
+
+	i = -1;
+	pthread_mutex_destroy(&data->print_lock);
+	pthread_mutex_destroy(&data->death_lock);
+	while (++i < data->num_philos)
+		pthread_mutex_destroy(&data->forks[i]);
 }
