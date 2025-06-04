@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 09:06:48 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 12:09:25 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	get_passed_time(t_time *prev, t_time *curr)
 	return (time);
 }
 
-int	usleep_wrapper(int duration, int is_dead)
+int	usleep_wrapper(long duration, int is_dead)
 {
 	t_time		curr;
 	t_time		prev;
@@ -42,6 +42,7 @@ int	usleep_wrapper(int duration, int is_dead)
 	if (gettimeofday(&prev, NULL) == -1)
 		return (-1);
 	rest = 0;
+	duration = duration * 1000;
 	while (rest <= duration && !is_dead)
 	{
 		if (gettimeofday(&curr, NULL) == -1)

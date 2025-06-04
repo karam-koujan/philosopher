@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 07:41:34 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 11:59:18 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	print_message(t_philo *philo_data, int type)
 		return (-1);
 	if (type == 0)
 		printf("%ld	%i has taken a fork\n", \
-		philo_data->eat_time, philo_data->id);
+			get_timestamp(philo_data->data->start_time), philo_data->id);
 	else if (type == 1)
 		printf("%ld	%i is eating\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);

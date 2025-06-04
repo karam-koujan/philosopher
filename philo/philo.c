@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 11:12:23 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 12:08:47 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,17 +121,17 @@ int	eat(t_philo *philo_data)
 {
 	if (print_message(philo_data, 1) == -1)
 		return (-1);
-	if (usleep_wrapper(philo_data->data->time_to_eat, 
-			is_dead(philo_data->data)) == -1)
-		return (-1);
-	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
-		return (-1);
-	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
-		return (-1);
 	if (pthread_mutex_lock(&philo_data->eat_time_lock) != 0)
 		return (-1);
 	philo_data->eat_time = get_timestamp(philo_data->data->start_time);
 	if (pthread_mutex_unlock(&philo_data->eat_time_lock) != 0)
+		return (-1);
+	if (usleep_wrapper(philo_data->data->time_to_eat, 
+			is_dead(philo_data->data) == -1))
+		return (-1);
+	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
+		return (-1);
+	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
 		return (-1);
 	if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
 		return (-1);
@@ -219,6 +219,8 @@ int	stop_eating(t_data *philo_data)
 
 	i = -1;
 	end = 1;
+	if (philo_data->eat_num == 0)
+		return (0);
 	while (++i < philo_data->num_philos)
 	{
 		if (pthread_mutex_lock(&philo_data->philosophers[i]->num_meals_lock)
@@ -248,6 +250,7 @@ void	*monitoring(void *data)
 	{
 		while (++i < philo_data->num_philos)
 		{
+			// printf("---->%d hi%ld\n",i, get_last_meal_time(philo_data, i));
 			if (get_last_meal_time(philo_data, i) >= philo_data->time_to_die)
 			{
 				is_dead = 1;
@@ -256,6 +259,7 @@ void	*monitoring(void *data)
 				philo_data->philo_died = 1;
 				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
 					return (NULL);
+				break;
 			}
 		}
 		i = -1;
