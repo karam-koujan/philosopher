@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 12:08:47 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 12:33:32 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,7 +250,6 @@ void	*monitoring(void *data)
 	{
 		while (++i < philo_data->num_philos)
 		{
-			// printf("---->%d hi%ld\n",i, get_last_meal_time(philo_data, i));
 			if (get_last_meal_time(philo_data, i) >= philo_data->time_to_die)
 			{
 				is_dead = 1;
@@ -259,6 +258,7 @@ void	*monitoring(void *data)
 				philo_data->philo_died = 1;
 				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
 					return (NULL);
+				print_message(philo_data->philosophers[i], 4);
 				break;
 			}
 		}
