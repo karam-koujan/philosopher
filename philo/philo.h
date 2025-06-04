@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:05:07 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 07:28:41 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ typedef struct	s_philo
 	pthread_mutex_t	num_meals_lock;
 	pthread_mutex_t	eat_time_lock;
 	long			eat_time;
+	t_data			*data;
 	pthread_mutex_t	arg_lock;
 }				t_philo;
 

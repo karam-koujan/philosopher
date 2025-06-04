@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 07:16:03 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 07:33:15 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	*monitor_routine(void *data)
 	return (NULL);
 }
 
-t_philo	*init_philo(int id)
+t_philo	*init_philo(int id, t_data *data)
 {
 	t_philo	*philo;
 
@@ -65,6 +65,11 @@ t_philo	*init_philo(int id)
 	philo->id = id;
 	philo->num_meals_eaten = 0;
 	philo->eat_time = 0;
+	philo->data = data;
+	if (pthread_mutex_init(&philo->num_meals_lock, NULL) != 0)
+		return (free(philo), NULL);
+	if (pthread_mutex_init(&philo->eat_time_lock, NULL) != 0)
+		return (free(philo), NULL);
 	return (philo);
 }
 
@@ -210,7 +215,7 @@ void	start_simulation(t_data *data)
 		if (!philo)
 			return ;
 		data->philosophers[i] = philo;
-		philo_data.philo = philo;
+		philo_data.id = philo;
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
@@ -238,7 +243,7 @@ pthread_mutex_t	*init_forks(int	forks_num)
 		return (NULL);
 	while (++i < forks_num)
 	{
-		if (pthread_mutex_init(&forks[i], NULL) == -1)
+		if (pthread_mutex_init(&forks[i], NULL) != 0)
 			return (NULL);
 	}
 	return (forks);
@@ -269,6 +274,10 @@ int	main(int ac, char **av)
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
 		return (printf("something went wrong!"), 1);
+	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
+		return (1);
+	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
+		return (1);
 	start_simulation(data);
 	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
 	// 	return (printf("error in creating thread"), 1);
