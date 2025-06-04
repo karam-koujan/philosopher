@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 09:12:49 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 10:30:50 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,12 @@ void	*philo_func(void *data)
 			return (NULL);
 		if (eat(philo_data) == -1)
 			return (NULL);
+		if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
+			return (NULL);
+		if (philo_data->num_meals_eaten == philo_data->data->eat_num)
+			return (pthread_mutex_unlock(&philo_data->num_meals_lock), NULL);
+		if (pthread_mutex_unlock(&philo_data->num_meals_lock) != 0)
+			return (NULL);
 		if (sleeping(philo_data) == -1)
 			return (NULL);
 		if (think(philo_data) == -1)
@@ -204,6 +210,27 @@ long	get_last_meal_time(t_data *philo_data, int i)
 	return (get_timestamp(philo_data->start_time) - eat_time);
 }
 
+int	stop_eating(t_data *philo_data)
+{
+	int	i;
+	int	end;
+
+	i = -1;
+	end = 1;
+	while (++i < philo_data->num_philos)
+	{
+		if (pthread_mutex_lock(&philo_data->philosophers[i]->num_meals_lock)
+			!= 0)
+			return (-1);
+		if (philo_data->philosophers[i]->num_meals_eaten != philo_data->eat_num)
+			end = 0;
+		if (pthread_mutex_lock(&philo_data->philosophers[i]->num_meals_lock)
+			!= 0)
+			return (-1);
+	}
+	return (end);
+}
+
 void	*monitoring(void *data)
 {
 	t_data	*philo_data;
@@ -215,7 +242,7 @@ void	*monitoring(void *data)
 	is_dead = 0;
 	i = -1;
 	finish_eating = 1;
-	while (!is_dead)
+	while (!is_dead && stop_eating(philo_data) == 0)
 	{
 		while (++i < philo_data->num_philos)
 		{
@@ -229,7 +256,6 @@ void	*monitoring(void *data)
 					return (NULL);
 			}
 			i = -1;
-			// finish_eating = finish_eating & (philo_data->data->philosophers[i]->num_meals_eaten == philo_data->data->eat_num);
 		}
 	}
 	return (NULL);
