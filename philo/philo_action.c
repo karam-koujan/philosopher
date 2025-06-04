@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 14:29:39 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:01:50 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	take_fork(t_philo *philo_data)
 	if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
 		return (-1);
 	print_message(philo_data, 0);
+	if (philo_data->data->num_philos == 1)
+		return (pthread_mutex_unlock(get_fork(philo_data, 0)), -1);
 	if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
 		return (-1);
 	print_message(philo_data, 0);

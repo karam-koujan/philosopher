@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 14:33:32 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:42:40 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,12 @@ void	*philo_func(void *data)
 	t_philo	*philo_data;
 
 	philo_data = data;
-	if (philo_data->id % 2 != 0)
-		usleep_wrapper(500 / 1000, philo_data->data);
+	if (philo_data->id % 2 == 0)
+	{
+		usleep(500);
+		// if (usleep_wrapper(500 / 1000, philo_data->data) == -1)
+		// 	return (NULL);
+	}
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -218,9 +222,6 @@ pthread_mutex_t	*init_forks(int	forks_num)
 int	main(int ac, char **av)
 {
 	t_data		*data;
-	pthread_t	monitor;
-	t_time		curr;
-	t_time		prev;
 
 	if (ac != 5 && ac != 6)
 		return (write(2, "BAD ARG", 7), 1);
