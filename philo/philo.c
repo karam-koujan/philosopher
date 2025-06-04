@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 06:51:59 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 07:16:03 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ t_philo	*init_philo(int id)
 		return (NULL);
 	philo->id = id;
 	philo->num_meals_eaten = 0;
-	philo->eat_time = -1;
+	philo->eat_time = 0;
 	return (philo);
 }
 
@@ -141,6 +141,9 @@ void	*philo_func(void *data)
 	t_philo_data	*philo_data;
 
 	philo_data = data;
+	if (philo_data->philo->id % 2 != 0)
+		usleep_wrapper(philo_data->data->time_to_eat / 2, \
+			philo_data->data->philo_died);
 	while (!philo_data->data->philo_died)
 	{
 		if (take_fork(philo_data) == -1)
@@ -206,9 +209,8 @@ void	start_simulation(t_data *data)
 		philo = init_philo(i + 1);
 		if (!philo)
 			return ;
+		data->philosophers[i] = philo;
 		philo_data.philo = philo;
-		if ((i + 1) % 2 != 0)
-			usleep_wrapper(data->time_to_eat / 2, data->philo_died);
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
