@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:17:58 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:20:38 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ int	main(int ac, char **av)
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
 		return (1);
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
-		return (1);
+		return (pthread_mutex_destroy(&data->print_lock), 1);
 	start_simulation(data);
+	destroy_data_mutex(data);
 }

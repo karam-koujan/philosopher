@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:18:06 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:18:17 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,22 @@ void	*philo_func(void *data)
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 		if (eat(philo_data) == -1)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 		if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 		if (philo_data->num_meals_eaten == philo_data->data->eat_num)
-			return (pthread_mutex_unlock(&philo_data->num_meals_lock), NULL);
+			return (pthread_mutex_unlock(&philo_data->num_meals_lock), \
+			destroy_philo_mutex(philo_data), NULL);
 		if (pthread_mutex_unlock(&philo_data->num_meals_lock) != 0)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 		if (sleeping(philo_data) == -1)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 		if (think(philo_data) == -1)
-			return (NULL);
+			return (destroy_philo_mutex(philo_data), NULL);
 	}
-	return (NULL);
+	return (destroy_philo_mutex(philo_data), NULL);
 }
 
 void	*monitoring(void *data)
