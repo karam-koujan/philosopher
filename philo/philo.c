@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 16:20:38 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 16:36:57 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,15 +65,15 @@ void	start_simulation(t_data *data)
 		data->philosophers[i] = philo;
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, philo) != 0)
-			printf("error in creating thread");
+			data->num_philos = i;
 	}
 	if (pthread_create(&data->monitor, NULL, &monitoring, data) != 0)
-		printf("error in creating thread");
+		return ;
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(data->philosophers[i]->thread, NULL) != 0)
-			printf("error in joining threads");
+			continue ;
 	}
 	if (pthread_join(data->monitor, NULL) != 0)
 		printf("error in joining threads");
