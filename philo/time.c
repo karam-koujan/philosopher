@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 12:34:50 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:05:11 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,24 +31,35 @@ int	get_passed_time(t_time *prev, t_time *curr)
 	return (time);
 }
 
-int	usleep_wrapper(long duration, int is_dead)
+int	usleep_wrapper(long duration, t_data *data)
 {
 	t_time		curr;
 	t_time		prev;
 	long		rest;
+	int			is_dead;
 
-	if (is_dead == -1)
-		return (-1);
 	if (gettimeofday(&prev, NULL) == -1)
 		return (-1);
 	rest = 0;
 	duration = duration * 1000;
+	if (pthread_mutex_lock(&data->death_lock) != 0)
+		return (-1);
+	is_dead = data->philo_died;
+	if (pthread_mutex_unlock(&data->death_lock) != 0)
+		return (-1);
 	while (rest <= duration && !is_dead)
 	{
 		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
+		if (pthread_mutex_lock(&data->death_lock) != 0)
+			return (-1);
+		is_dead = data->philo_died;
+		if (pthread_mutex_unlock(&data->death_lock) != 0)
+			return (-1);
 	}
+	if (is_dead == 1)
+		return (-1);
 	return (0);
 }
 

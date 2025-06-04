@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 12:33:32 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:10:31 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,8 +126,8 @@ int	eat(t_philo *philo_data)
 	philo_data->eat_time = get_timestamp(philo_data->data->start_time);
 	if (pthread_mutex_unlock(&philo_data->eat_time_lock) != 0)
 		return (-1);
-	if (usleep_wrapper(philo_data->data->time_to_eat, 
-			is_dead(philo_data->data) == -1))
+	if (usleep_wrapper(philo_data->data->time_to_eat, \
+		philo_data->data) == -1)
 		return (-1);
 	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
 		return (-1);
@@ -148,7 +148,7 @@ int	sleeping(t_philo *philo_data)
 	if (print_message(philo_data, 2) == -1)
 		return (-1);
 	if (usleep_wrapper(philo_data->data->time_to_sleep, \
-		is_dead(philo_data->data)) == -1)
+		philo_data->data) == -1)
 		return (-1);
 	return (0);
 }
@@ -179,7 +179,10 @@ void	*philo_func(void *data)
 
 	philo_data = data;
 	if (philo_data->id % 2 != 0)
-		usleep_wrapper(philo_data->data->time_to_eat / 2, is_dead(data));
+	{
+		if (usleep_wrapper(philo_data->data->time_to_eat / 2, philo_data->data) == -1)
+			return (NULL);
+	}
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -240,12 +243,10 @@ void	*monitoring(void *data)
 	t_data	*philo_data;
 	int		is_dead;
 	int		i;
-	int		finish_eating;
 
 	philo_data = data;
 	is_dead = 0;
 	i = -1;
-	finish_eating = 1;
 	while (!is_dead && stop_eating(philo_data) == 0)
 	{
 		while (++i < philo_data->num_philos)
@@ -343,9 +344,4 @@ int	main(int ac, char **av)
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
 		return (1);
 	start_simulation(data);
-	// if (pthread_create(&monitor, NULL, &monitor_routine, data) != 0)
-	// 	return (printf("error in creating thread"), 1);
-	// if (pthread_join(monitor, NULL) != 0)
-	// 	return (printf("error in creating thread"), 1);
-	
 }

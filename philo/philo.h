@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 12:08:07 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:00:39 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct timeval	t_time;
 
 long	get_timestamp(long start_time);
 long	gettimeofday_wrapper(void);
-int		usleep_wrapper(long duration, int is_dead);
+int	usleep_wrapper(long duration, t_data *data);
 int		print_message(t_philo *philo_data, int type);
 int		ft_atoi(const char *str);
 int		is_number(char *nbr);
