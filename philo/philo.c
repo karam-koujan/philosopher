@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/02 23:41:31 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 06:51:59 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,12 @@ t_philo	**init_philosophers(t_data	*data)
 	int		i;
 
 	i = -1;
-	philo_arr = malloc((data->num_philos + 1) * sizeof(t_data *));
+	philo_arr = malloc((data->num_philos + 1) * sizeof(t_philo *));
 	if (!philo_arr)
 		return (NULL);
 	while (++i < data->num_philos)
 	{
-		philo_arr[i] = malloc(sizeof(t_data *));
+		philo_arr[i] = malloc(sizeof(t_philo));
 		if (!philo_arr[i])
 			return (free_arr((void **)philo_arr), NULL);
 	}
@@ -64,6 +64,7 @@ t_philo	*init_philo(int id)
 		return (NULL);
 	philo->id = id;
 	philo->num_meals_eaten = 0;
+	philo->eat_time = -1;
 	return (philo);
 }
 
@@ -88,13 +89,9 @@ int	take_fork(t_philo_data *philo_data)
 	if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
 		return (-1);
 	print_message(philo_data, 0);
-	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
-		return (-1);
 	if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
 		return (-1);
 	print_message(philo_data, 0);
-	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
-		return (-1);
 	return (0);
 }
 
@@ -104,6 +101,10 @@ int	eat(t_philo_data *philo_data)
 		return (-1);
 	if (usleep_wrapper(philo_data->data->time_to_eat, \
 		philo_data->data->philo_died) == -1)
+		return (-1);
+	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
+		return (-1);
+	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
 		return (-1);
 	if (pthread_mutex_lock(&philo_data->philo->eat_time_lock) != 0)
 		return (-1);
@@ -154,6 +155,12 @@ void	*philo_func(void *data)
 	return (NULL);
 }
 
+long	get_last_meal_time(t_philo_data *philo_data, int i)
+{
+	return (get_timestamp(philo_data->data->start_time) - \
+	philo_data->data->philosophers[i]->eat_time);
+}
+
 void	*monitoring(void *data)
 {
 	t_philo_data	*philo_data;
@@ -169,7 +176,7 @@ void	*monitoring(void *data)
 	{
 		while (++i < philo_data->data->num_philos)
 		{
-			if (get_timestamp(philo_data->data->start_time) - philo_data->data->philosophers[i]->eat_time >= philo_data->data->time_to_die)
+			if (get_last_meal_time(philo_data, i) >= philo_data->data->time_to_die)
 			{
 				is_dead = 1;
 				if (pthread_mutex_lock(&philo_data->data->death_lock) != 0)
@@ -178,6 +185,7 @@ void	*monitoring(void *data)
 				if (pthread_mutex_unlock(&philo_data->data->death_lock) != 0)
 					return (NULL);
 			}
+			i = -1;
 			// finish_eating = finish_eating & (philo_data->data->philosophers[i]->num_meals_eaten == philo_data->data->eat_num);
 		}
 	}
@@ -200,7 +208,7 @@ void	start_simulation(t_data *data)
 			return ;
 		philo_data.philo = philo;
 		if ((i + 1) % 2 != 0)
-			usleep_wrapper(200, data->philo_died);
+			usleep_wrapper(data->time_to_eat / 2, data->philo_died);
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, &philo_data) != 0)
 				printf("error in creating thread");
