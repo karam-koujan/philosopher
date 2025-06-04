@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 14:42:40 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:17:58 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,99 +25,6 @@ int	validate_arg(int ac, char **av)
 			return (0);
 	}
 	return (1);
-}
-
-t_philo	**init_philosophers(t_data	*data)
-{
-	t_philo	**philo_arr;
-	int		i;
-
-	i = -1;
-	philo_arr = malloc((data->num_philos + 1) * sizeof(t_philo *));
-	if (!philo_arr)
-		return (NULL);
-	while (++i < data->num_philos)
-	{
-		philo_arr[i] = malloc(sizeof(t_philo));
-		if (!philo_arr[i])
-			return (free_arr((void **)philo_arr), NULL);
-	}
-	philo_arr[i] = NULL;
-	return (philo_arr);
-}
-
-t_philo	*init_philo(int id, t_data *data)
-{
-	t_philo	*philo;
-
-	philo = malloc(sizeof(t_philo));
-	if (!philo)
-		return (NULL);
-	philo->id = id;
-	philo->num_meals_eaten = 0;
-	philo->eat_time = 0;
-	philo->data = data;
-	if (pthread_mutex_init(&philo->num_meals_lock, NULL) != 0)
-		return (free(philo), NULL);
-	if (pthread_mutex_init(&philo->eat_time_lock, NULL) != 0)
-		return (free(philo), NULL);
-	return (philo);
-}
-
-int	is_dead(t_data *data)
-{
-	int	dead;
-
-	dead = 0;
-	if (pthread_mutex_lock(&data->death_lock) != 0)
-		return (-1);
-	dead = data->philo_died;
-	if (pthread_mutex_unlock(&data->death_lock) != 0)
-		return (-1);
-	return (dead);
-}
-
-void	*philo_func(void *data)
-{
-	t_philo	*philo_data;
-
-	philo_data = data;
-	if (philo_data->id % 2 == 0)
-	{
-		usleep(500);
-		// if (usleep_wrapper(500 / 1000, philo_data->data) == -1)
-		// 	return (NULL);
-	}
-	while (!is_dead(philo_data->data))
-	{
-		if (take_fork(philo_data) == -1)
-			return (NULL);
-		if (eat(philo_data) == -1)
-			return (NULL);
-		if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
-			return (NULL);
-		if (philo_data->num_meals_eaten == philo_data->data->eat_num)
-			return (pthread_mutex_unlock(&philo_data->num_meals_lock), NULL);
-		if (pthread_mutex_unlock(&philo_data->num_meals_lock) != 0)
-			return (NULL);
-		if (sleeping(philo_data) == -1)
-			return (NULL);
-		if (think(philo_data) == -1)
-			return (NULL);
-	}
-	return (NULL);
-}
-
-long	get_last_meal_time(t_data *philo_data, int i)
-{
-	long	eat_time;
-
-	if (pthread_mutex_lock(&philo_data->philosophers[i]->eat_time_lock) != 0)
-		return (-1);
-	eat_time = philo_data->philosophers[i]->eat_time;
-	if (pthread_mutex_unlock(&philo_data->philosophers[i]->eat_time_lock) != 0)
-		return (-1);
-	return (get_timestamp(philo_data->start_time) - eat_time);
 }
 
 int	stop_eating(t_data *philo_data)
@@ -141,36 +48,6 @@ int	stop_eating(t_data *philo_data)
 			return (-1);
 	}
 	return (end);
-}
-
-void	*monitoring(void *data)
-{
-	t_data	*philo_data;
-	int		is_dead;
-	int		i;
-
-	philo_data = data;
-	is_dead = 0;
-	i = -1;
-	while (!is_dead && stop_eating(philo_data) == 0)
-	{
-		while (++i < philo_data->num_philos)
-		{
-			if (get_last_meal_time(philo_data, i) >= philo_data->time_to_die)
-			{
-				is_dead = 1;
-				if (pthread_mutex_lock(&philo_data->death_lock) != 0)
-					return (NULL);
-				philo_data->philo_died = 1;
-				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
-					return (NULL);
-				print_message(philo_data->philosophers[i], 4);
-				break;
-			}
-		}
-		i = -1;
-	}
-	return (NULL);
 }
 
 void	start_simulation(t_data *data)
@@ -200,23 +77,6 @@ void	start_simulation(t_data *data)
 	}
 	if (pthread_join(data->monitor, NULL) != 0)
 		printf("error in joining threads");
-}
-
-pthread_mutex_t	*init_forks(int	forks_num)
-{
-	pthread_mutex_t	*forks;
-	int				i;
-
-	i = -1;
-	forks = malloc(forks_num * sizeof(pthread_mutex_t));
-	if (!forks)
-		return (NULL);
-	while (++i < forks_num)
-	{
-		if (pthread_mutex_init(&forks[i], NULL) != 0)
-			return (NULL);
-	}
-	return (forks);
 }
 
 int	main(int ac, char **av)

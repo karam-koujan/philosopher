@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 14:16:50 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:20:04 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ typedef struct s_philo_data
 }				t_philo_data;
 typedef struct timeval	t_time;
 
-long		get_timestamp(long start_time);
-long		gettimeofday_wrapper(void);
+long			get_timestamp(long start_time);
+long			gettimeofday_wrapper(void);
 int				usleep_wrapper(long duration, t_data *data);
 int				print_message(t_philo *philo_data, int type);
 int				ft_atoi(const char *str);
@@ -68,4 +68,11 @@ int				take_fork(t_philo *philo_data);
 int				think(t_philo *philo_data);
 int				sleeping(t_philo *philo_data);
 int				eat(t_philo *philo_data);
+void			*philo_func(void *data);
+void			*monitoring(void *data);
+int				is_dead(t_data *data);
+long			get_last_meal_time(t_data *philo_data, int i);
+pthread_mutex_t	*init_forks(int forks_num);
+t_philo			**init_philosophers(t_data	*data);
+t_philo			*init_philo(int id, t_data *data);
 #endif
