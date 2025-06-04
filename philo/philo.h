@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 09:02:10 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 10:45:36 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,5 +62,5 @@ int		ft_atoi(const char *str);
 int		is_number(char *nbr);
 void	free_arr(void	**arr);
 int		is_dead(t_data *data);
-
+int		stop_eating(t_data *philo_data);
 #endif

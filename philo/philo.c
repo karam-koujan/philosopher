@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 10:30:50 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 11:12:23 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,6 +136,8 @@ int	eat(t_philo *philo_data)
 	if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
 		return (-1);
 	philo_data->num_meals_eaten++;
+	if (philo_data->num_meals_eaten == philo_data->data->eat_num)
+		return (pthread_mutex_unlock(&philo_data->num_meals_lock), -1);
 	if (pthread_mutex_unlock(&philo_data->num_meals_lock) != 0)
 		return (-1);
 	return (0);
@@ -224,7 +226,7 @@ int	stop_eating(t_data *philo_data)
 			return (-1);
 		if (philo_data->philosophers[i]->num_meals_eaten != philo_data->eat_num)
 			end = 0;
-		if (pthread_mutex_lock(&philo_data->philosophers[i]->num_meals_lock)
+		if (pthread_mutex_unlock(&philo_data->philosophers[i]->num_meals_lock)
 			!= 0)
 			return (-1);
 	}
@@ -255,8 +257,8 @@ void	*monitoring(void *data)
 				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
 					return (NULL);
 			}
-			i = -1;
 		}
+		i = -1;
 	}
 	return (NULL);
 }
