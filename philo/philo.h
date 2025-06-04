@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:36:36 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:58:56 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,4 +75,6 @@ long			get_last_meal_time(t_data *philo_data, int i);
 pthread_mutex_t	*init_forks(int forks_num);
 t_philo			**init_philosophers(t_data	*data);
 t_philo			*init_philo(int id, t_data *data);
+void			destroy_philo_mutex(t_data *data);
+void			destroy_data_mutex(t_data *data);
 #endif

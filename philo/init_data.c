@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:56:57 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 15:58:47 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	destroy_philo_mutex(t_philo *data)
 	pthread_mutex_destroy(&data->eat_time_lock);
 }
 
-void	destroy_philo_mutex(t_data *data)
+void	destroy_data_mutex(t_data *data)
 {
 	int	i;
 
