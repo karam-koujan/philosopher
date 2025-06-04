@@ -1,5 +1,5 @@
 NAME = philo
-CFLAGS = -g -fsanitize=thread  -Werror -Wextra -Werror
+CFLAGS = -g  -Werror -Wextra -Werror #-fsanitize=thread 
 CC = cc
 OBJ = philo.o philo_helper.o time.o helper.o philo_action.o
 

@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 14:13:37 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/04 14:30:55 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	*philo_func(void *data)
 	philo_data = data;
 	if (philo_data->id % 2 != 0)
 	{
-		if (usleep_wrapper(philo_data->data->time_to_eat / 2, philo_data->data) == -1)
+		if (usleep_wrapper(500 / 1000 ,philo_data->data) == -1)
 			return (NULL);
 	}
 	while (!is_dead(philo_data->data))
