@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/11 09:03:32 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:04:10 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ int	main(int ac, char **av)
 	if ((ac != 5 && ac != 6) || !validate_arg(ac, av))
 		return (write(2, "BAD ARG", 7), 1);
 	data = malloc(sizeof(t_data));
+	if (!data)
+		return (1);
 	data->num_philos = ft_atoi(av[1]);
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -98,7 +100,7 @@ int	main(int ac, char **av)
 	data->forks = init_forks(data->num_philos);
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
-		return (printf("something went wrong!"), 1);
+		return (printf("something went wrong!"), free(data), 1);
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
 		return (1);
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)

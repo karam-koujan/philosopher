@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 11:48:36 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:08:19 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ void			destroy_philo_mutex(t_philo *data);
 void			destroy_data_mutex(t_data *data);
 void			free_philosophers(t_philo **philos, int i);
 void			single_philo(t_philo *data);
+void			destroy_mutex_arr(pthread_mutex_t *arr, int i);
 
 #endif

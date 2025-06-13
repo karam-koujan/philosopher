@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/11 08:56:54 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:07:58 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,4 +73,13 @@ int	print_message(t_philo *philo_data, int type)
 	if (pthread_mutex_unlock(&(philo_data->data->print_lock)) != 0)
 		return (-1);
 	return (0);
+}
+
+void	destroy_mutex_arr(pthread_mutex_t *arr, int i)
+{
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&arr[i]);
+		i--;
+	}
 }

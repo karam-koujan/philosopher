@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 11:21:59 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:10:20 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ pthread_mutex_t	*init_forks(int forks_num)
 	while (++i < forks_num)
 	{
 		if (pthread_mutex_init(&forks[i], NULL) != 0)
-			return (NULL);
+			return (destroy_mutex_arr(forks, i - 1), free(forks), NULL);
 	}
 	return (forks);
 }
