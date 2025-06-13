@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:54:30 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:55:55 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	start_simulation(t_data *data)
 			data->num_philos = i;
 	}
 	if (pthread_create(&data->monitor, NULL, &monitoring, data) != 0)
-		return ;
+		return (free_philosophers(data->philosophers, data->num_philos - 1));
 	i = -1;
 	while (++i < data->num_philos)
 	{
