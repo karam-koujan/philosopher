@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:23:07 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:54:30 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ void	start_simulation(t_data *data)
 	}
 	if (pthread_join(data->monitor, NULL) != 0)
 		printf("error in joining threads");
+	free_philosophers(data->philosophers, data->num_philos - 1);
 }
 
 int	main(int ac, char **av)
@@ -110,7 +111,6 @@ int	main(int ac, char **av)
 		free(data->forks), free(data->philosophers), free(data), 1);
 	start_simulation(data);
 	destroy_data_mutex(data);
-	free_philosophers(data->philosophers, data->num_philos - 1);
 	free(data->forks);
 	free(data);
 }
