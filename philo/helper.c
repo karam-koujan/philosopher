@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:07:58 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:20:27 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	free_philosophers(t_philo **philos, int i)
 		free(philos[i]);
 		i--;
 	}
+	free(philos);
 }
 
 int	is_number(char *nbr)

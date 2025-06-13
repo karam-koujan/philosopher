@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:19:05 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 12:23:07 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,12 +103,14 @@ int	main(int ac, char **av)
 		return (free(data), 1);
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
 		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
-		free(data->forks), free(data->philosophers), 1);
+		free(data->forks), free(data->philosophers), free(data), 1);
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
 		return (pthread_mutex_destroy(&data->print_lock), \
 		destroy_mutex_arr(data->forks, data->num_philos - 1), \
-		free(data->forks), free(data->philosophers), 1);
+		free(data->forks), free(data->philosophers), free(data), 1);
 	start_simulation(data);
 	destroy_data_mutex(data);
 	free_philosophers(data->philosophers, data->num_philos - 1);
+	free(data->forks);
+	free(data);
 }
