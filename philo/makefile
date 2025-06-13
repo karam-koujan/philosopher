@@ -1,9 +1,10 @@
 NAME = philo
-CFLAGS =  -Wall -Wextra -Werror #-fsanitize=thread 
+CFLAGS =  -Wall -Wextra -Werror -fsanitize=address 
 CC = cc
 OBJ = philo.o philo_helper.o time.o helper.o philo_action.o init_data.o threads.o
 
 all : $(NAME)
+
 $(NAME) : $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 

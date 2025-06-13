@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 16:36:57 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/11 09:03:32 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	start_simulation(t_data *data)
 	{
 		philo = init_philo(i + 1, data);
 		if (!philo)
-			return ;
+			return (free_philosophers(data->philosophers, i - 1));
 		data->philosophers[i] = philo;
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, philo) != 0)
@@ -83,9 +83,7 @@ int	main(int ac, char **av)
 {
 	t_data		*data;
 
-	if (ac != 5 && ac != 6)
-		return (write(2, "BAD ARG", 7), 1);
-	if (!validate_arg(ac, av))
+	if ((ac != 5 && ac != 6) || !validate_arg(ac, av))
 		return (write(2, "BAD ARG", 7), 1);
 	data = malloc(sizeof(t_data));
 	data->num_philos = ft_atoi(av[1]);
@@ -107,4 +105,5 @@ int	main(int ac, char **av)
 		return (pthread_mutex_destroy(&data->print_lock), 1);
 	start_simulation(data);
 	destroy_data_mutex(data);
+	free_philosophers(data->philosophers, data->num_philos - 1);
 }

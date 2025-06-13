@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 16:03:16 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:48:36 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ typedef struct s_philo
 	pthread_mutex_t	eat_time_lock;
 	long			eat_time;
 	struct s_data	*data;
-	pthread_mutex_t	arg_lock;
 }				t_philo;
 
 typedef struct s_data {
@@ -47,11 +46,6 @@ typedef struct s_data {
 	pthread_mutex_t	*forks;
 }				t_data;
 
-typedef struct s_philo_data
-{
-	t_data	*data;
-	t_philo	*philo;
-}				t_philo_data;
 typedef struct timeval	t_time;
 
 long			get_timestamp(long start_time);
@@ -77,4 +71,7 @@ t_philo			**init_philosophers(t_data	*data);
 t_philo			*init_philo(int id, t_data *data);
 void			destroy_philo_mutex(t_philo *data);
 void			destroy_data_mutex(t_data *data);
+void			free_philosophers(t_philo **philos, int i);
+void			single_philo(t_philo *data);
+
 #endif

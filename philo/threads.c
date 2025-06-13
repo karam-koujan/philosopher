@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 16:18:17 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:49:02 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	*philo_func(void *data)
 	t_philo	*philo_data;
 
 	philo_data = data;
+	if (philo_data->data->num_philos == 1)
+		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
 		usleep_wrapper(500 / 1000, philo_data->data);
 	while (!is_dead(philo_data->data))
@@ -33,8 +35,6 @@ void	*philo_func(void *data)
 		if (pthread_mutex_unlock(&philo_data->num_meals_lock) != 0)
 			return (destroy_philo_mutex(philo_data), NULL);
 		if (sleeping(philo_data) == -1)
-			return (destroy_philo_mutex(philo_data), NULL);
-		if (think(philo_data) == -1)
 			return (destroy_philo_mutex(philo_data), NULL);
 	}
 	return (destroy_philo_mutex(philo_data), NULL);
@@ -62,7 +62,7 @@ void	*monitoring(void *data)
 				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
 					return (NULL);
 				print_message(philo_data->philosophers[i], 4);
-				break;
+				break ;
 			}
 		}
 		i = -1;
@@ -93,4 +93,10 @@ long	get_last_meal_time(t_data *philo_data, int i)
 	if (pthread_mutex_unlock(&philo_data->philosophers[i]->eat_time_lock) != 0)
 		return (-1);
 	return (get_timestamp(philo_data->start_time) - eat_time);
+}
+
+void	single_philo(t_philo *data)
+{
+	if (take_fork(data) == -1)
+		return (destroy_data_mutex(data->data));
 }

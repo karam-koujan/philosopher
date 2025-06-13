@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:36:59 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/13 11:47:06 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ int	sleeping(t_philo *philo_data)
 	if (usleep_wrapper(philo_data->data->time_to_sleep, \
 		philo_data->data) == -1)
 		return (-1);
+	if (think(philo_data) == -1)
+		return (-1);
 	return (0);
 }
 
@@ -67,7 +69,7 @@ int	take_fork(t_philo *philo_data)
 		return (-1);
 	print_message(philo_data, 0);
 	if (philo_data->data->num_philos == 1)
-		return (pthread_mutex_unlock(get_fork(philo_data, 0)), -1);
+		return (pthread_mutex_unlock(get_fork(philo_data, 0)), 0);
 	if (pthread_mutex_lock(get_fork(philo_data, 1)) != 0)
 		return (-1);
 	print_message(philo_data, 0);

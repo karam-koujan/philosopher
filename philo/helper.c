@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 13:38:49 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/11 08:56:54 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@ void	free_arr(void	**arr)
 	while (arr[++i])
 		free(arr[i]);
 	free(arr);
+}
+
+void	free_philosophers(t_philo **philos, int i)
+{
+
+	while (i >= 0)
+	{
+		pthread_mutex_destroy(&philos[i]->num_meals_lock);
+		pthread_mutex_destroy(&philos[i]->eat_time_lock);
+		free(philos[i]);
+		i--;
+	}
 }
 
 int	is_number(char *nbr)
