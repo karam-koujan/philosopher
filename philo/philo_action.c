@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_action.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 11:47:06 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 13:36:42 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,11 +60,6 @@ int	think(t_philo *philo_data)
 
 int	take_fork(t_philo *philo_data)
 {
-	int	left_fork_id;
-	int	right_fork_id;
-
-	left_fork_id = philo_data->id - 1;
-	right_fork_id = philo_data->id % philo_data->data->num_philos;
 	if (pthread_mutex_lock(get_fork(philo_data, 0)) != 0)
 		return (-1);
 	print_message(philo_data, 0);
