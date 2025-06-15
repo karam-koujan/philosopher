@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 14:50:11 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 17:59:19 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,7 @@ void	start_simulation(t_data *data)
 	data->start_time = gettimeofday_wrapper();
 	while (++i < data->num_philos)
 	{
-		philo = init_philo(i + 1, data);
-		if (!philo)
-			return (data->philosophers[i] = NULL, free(NULL));
-		data->philosophers[i] = philo;
+		philo = data->philosophers[i];
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, philo) != 0)
 			data->num_philos = i;
@@ -113,6 +110,7 @@ int	main(int ac, char **av)
 	data->forks = init_forks(data->num_philos);
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
-		return (free(data->philosophers), free(data), 1);
+		return (free_philosophers(data->philosophers), \
+			free(data->forks), free(data), 1);
 	return (run(data));
 }

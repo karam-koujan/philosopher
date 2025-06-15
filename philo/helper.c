@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 14:52:00 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 17:20:39 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ void	clean_up(t_data *data)
 {
 	destroy_data_mutex(data);
 	free_philosophers(data->philosophers);
+	data->philosophers = NULL;
 	free(data->forks);
+	data->forks = NULL;
 	free(data);
 }

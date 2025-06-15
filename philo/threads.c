@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 16:33:29 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 18:02:13 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1)
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep_wrapper(500 / 1000, philo_data->data);
+		usleep_wrapper(200 / 1000, philo_data->data);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)

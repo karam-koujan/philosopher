@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 14:25:42 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 17:59:44 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,24 @@ pthread_mutex_t	*init_forks(int forks_num)
 t_philo	**init_philosophers(t_data	*data)
 {
 	t_philo	**philo_arr;
+	int		i;
+	int		j;
 
+	i = -1;
+	j = -1;
 	philo_arr = malloc((data->num_philos + 1) * sizeof(t_philo *));
 	if (!philo_arr)
 		return (NULL);
+	while (++i < data->num_philos)
+	{
+		philo_arr[i] = init_philo(i + 1, data);
+		if (!philo_arr[i])
+		{
+			while (++j < i)
+				free(philo_arr[j]);
+			return (free(philo_arr), NULL);
+		}
+	}
 	philo_arr[data->num_philos] = NULL;
 	return (philo_arr);
 }
@@ -64,6 +78,8 @@ void	destroy_data_mutex(t_data *data)
 
 	i = -1;
 	if (!data)
+		return ;
+	if (!data->philosophers)
 		return ;
 	pthread_mutex_destroy(&data->print_lock);
 	pthread_mutex_destroy(&data->death_lock);
