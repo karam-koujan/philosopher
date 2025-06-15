@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_helper.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 10:05:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/04 15:37:25 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 14:53:28 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,4 +54,17 @@ int	ft_atoi(const char *str)
 		str++;
 	}
 	return (ft_strtoint(str, sign));
+}
+
+int	is_number(char *nbr)
+{
+	int	i;
+
+	i = -1;
+	while (nbr[++i])
+	{
+		if (!(nbr[i] >= '0' && nbr[i] <= '9'))
+			return (0);
+	}
+	return (1);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:08:19 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 14:53:57 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ typedef struct s_philo
 	struct s_data	*data;
 }				t_philo;
 
-typedef struct s_data {
+typedef struct s_data
+{
 	pthread_mutex_t	print_lock;
 	pthread_mutex_t	death_lock;
 	int				num_philos;
@@ -69,10 +70,10 @@ long			get_last_meal_time(t_data *philo_data, int i);
 pthread_mutex_t	*init_forks(int forks_num);
 t_philo			**init_philosophers(t_data	*data);
 t_philo			*init_philo(int id, t_data *data);
-void			destroy_philo_mutex(t_philo *data);
 void			destroy_data_mutex(t_data *data);
-void			free_philosophers(t_philo **philos, int i);
+void			free_philosophers(t_philo **philos);
 void			single_philo(t_philo *data);
 void			destroy_mutex_arr(pthread_mutex_t *arr, int i);
-
+void			clean_up(t_data *data);
+int				run(t_data *data);
 #endif

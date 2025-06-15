@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:10:20 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 14:25:42 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,19 @@ t_philo	*init_philo(int id, t_data *data)
 	return (philo);
 }
 
-void	destroy_philo_mutex(t_philo *data)
-{
-	pthread_mutex_destroy(&data->num_meals_lock);
-	pthread_mutex_destroy(&data->eat_time_lock);
-}
-
 void	destroy_data_mutex(t_data *data)
 {
 	int	i;
 
 	i = -1;
+	if (!data)
+		return ;
 	pthread_mutex_destroy(&data->print_lock);
 	pthread_mutex_destroy(&data->death_lock);
-	while (++i < data->num_philos)
+	while (data->philosophers[++i])
+	{
+		pthread_mutex_destroy(&data->philosophers[i]->num_meals_lock);
+		pthread_mutex_destroy(&data->philosophers[i]->eat_time_lock);
 		pthread_mutex_destroy(&data->forks[i]);
+	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:20:27 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 14:52:00 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,16 @@ void	free_arr(void	**arr)
 	free(arr);
 }
 
-void	free_philosophers(t_philo **philos, int i)
-{
-
-	while (i >= 0)
-	{
-		pthread_mutex_destroy(&philos[i]->num_meals_lock);
-		pthread_mutex_destroy(&philos[i]->eat_time_lock);
-		free(philos[i]);
-		i--;
-	}
-	free(philos);
-}
-
-int	is_number(char *nbr)
+void	free_philosophers(t_philo **philos)
 {
 	int	i;
 
 	i = -1;
-	while (nbr[++i])
-	{
-		if (!(nbr[i] >= '0' && nbr[i] <= '9'))
-			return (0);
-	}
-	return (1);
+	if (!philos)
+		return ;
+	while (philos[++i])
+		free(philos[i]);
+	free(philos);
 }
 
 int	print_message(t_philo *philo_data, int type)
@@ -83,4 +69,12 @@ void	destroy_mutex_arr(pthread_mutex_t *arr, int i)
 		pthread_mutex_destroy(&arr[i]);
 		i--;
 	}
+}
+
+void	clean_up(t_data *data)
+{
+	destroy_data_mutex(data);
+	free_philosophers(data->philosophers);
+	free(data->forks);
+	free(data);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/13 12:55:55 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 14:50:11 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,23 +61,35 @@ void	start_simulation(t_data *data)
 	{
 		philo = init_philo(i + 1, data);
 		if (!philo)
-			return (free_philosophers(data->philosophers, i - 1));
+			return (data->philosophers[i] = NULL, free(NULL));
 		data->philosophers[i] = philo;
 		if (pthread_create(&data->philosophers[i]->thread, NULL, \
 				&philo_func, philo) != 0)
 			data->num_philos = i;
 	}
 	if (pthread_create(&data->monitor, NULL, &monitoring, data) != 0)
-		return (free_philosophers(data->philosophers, data->num_philos - 1));
+		return ;
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(data->philosophers[i]->thread, NULL) != 0)
 			continue ;
 	}
-	if (pthread_join(data->monitor, NULL) != 0)
-		printf("error in joining threads");
-	free_philosophers(data->philosophers, data->num_philos - 1);
+	pthread_join(data->monitor, NULL);
+}
+
+int	run(t_data *data)
+{
+	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
+		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
+	free(data->forks), free(data->philosophers), free(data), 1);
+	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
+		return (pthread_mutex_destroy(&data->print_lock), \
+		destroy_mutex_arr(data->forks, data->num_philos - 1), \
+		free(data->forks), free(data->philosophers), free(data), 1);
+	start_simulation(data);
+	clean_up(data);
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -101,16 +113,6 @@ int	main(int ac, char **av)
 	data->forks = init_forks(data->num_philos);
 	data->philo_died = 0;
 	if (!data->philosophers || !data->forks)
-		return (free(data), 1);
-	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
-		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
-		free(data->forks), free(data->philosophers), free(data), 1);
-	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
-		return (pthread_mutex_destroy(&data->print_lock), \
-		destroy_mutex_arr(data->forks, data->num_philos - 1), \
-		free(data->forks), free(data->philosophers), free(data), 1);
-	start_simulation(data);
-	destroy_data_mutex(data);
-	free(data->forks);
-	free(data);
+		return (free(data->philosophers), free(data), 1);
+	return (run(data));
 }
