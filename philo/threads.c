@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 15:00:15 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/15 16:33:29 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,5 +95,5 @@ long	get_last_meal_time(t_data *philo_data, int i)
 void	single_philo(t_philo *data)
 {
 	if (take_fork(data) == -1)
-		return (destroy_data_mutex(data->data));
+		return ;
 }
