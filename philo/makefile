@@ -1,5 +1,5 @@
 NAME = philo
-CFLAGS =  -Wall -Wextra -Werror #-fsanitize=address
+CFLAGS =  -Wall -Wextra -Werror
 OBJ = philo.o philo_helper.o time.o helper.o philo_action.o init_data.o threads.o
 
 all : $(NAME)
