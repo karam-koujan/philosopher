@@ -48,7 +48,6 @@ int	usleep_wrapper(long duration, t_data *data)
 		rest = get_passed_time(&prev, &curr);
 		if (data->philo_died)
 			return (-1);
-		usleep(200);
 	}
 	return (0);
 }

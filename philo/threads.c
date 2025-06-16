@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1)
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep_wrapper(200 / 1000, philo_data->data);
+		usleep(100);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
