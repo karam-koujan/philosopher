@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 18:02:13 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/18 16:56:43 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1)
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep(500);
+		usleep(100);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -42,21 +42,23 @@ void	*philo_func(void *data)
 
 void	*monitoring(void *data)
 {
-	t_data	*philo_data;
-	int		i;
+	t_monitor	*philo_data;
+	int			i;
+	t_data		*global_d;
 
 	philo_data = data;
+	global_d = philo_data->data;
 	i = -1;
 	while (stop_eating(philo_data) == 0)
 	{
-		while (++i < philo_data->num_philos)
+		while (++i < global_d->num_philos)
 		{
-			if (get_last_meal_time(philo_data, i) >= philo_data->time_to_die)
+			if (get_last_meal_time(philo_data, i) >= global_d->time_to_die)
 			{
-				if (pthread_mutex_lock(&philo_data->death_lock) != 0)
+				if (pthread_mutex_lock(&global_d->death_lock) != 0)
 					return (NULL);
-				philo_data->philo_died = 1;
-				if (pthread_mutex_unlock(&philo_data->death_lock) != 0)
+				global_d->philo_died = 1;
+				if (pthread_mutex_unlock(&global_d->death_lock) != 0)
 					return (NULL);
 				print_message(philo_data->philosophers[i], 4);
 				return (NULL);
@@ -80,7 +82,7 @@ int	is_dead(t_data *data)
 	return (dead);
 }
 
-long	get_last_meal_time(t_data *philo_data, int i)
+long	get_last_meal_time(t_monitor *philo_data, int i)
 {
 	long	eat_time;
 
@@ -89,7 +91,7 @@ long	get_last_meal_time(t_data *philo_data, int i)
 	eat_time = philo_data->philosophers[i]->eat_time;
 	if (pthread_mutex_unlock(&philo_data->philosophers[i]->eat_time_lock) != 0)
 		return (-1);
-	return (get_timestamp(philo_data->start_time) - eat_time);
+	return (get_timestamp(philo_data->data->start_time) - eat_time);
 }
 
 void	single_philo(t_philo *data)

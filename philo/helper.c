@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   helper.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 17:20:39 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/18 16:32:33 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,12 +71,16 @@ void	destroy_mutex_arr(pthread_mutex_t *arr, int i)
 	}
 }
 
-void	clean_up(t_data *data)
+void	clean_up(t_monitor *monitor)
 {
-	destroy_data_mutex(data);
-	free_philosophers(data->philosophers);
-	data->philosophers = NULL;
+	t_data	*data;
+
+	data = monitor->data;
+	destroy_data_mutex(monitor);
+	free_philosophers(monitor->philosophers);
+	monitor->philosophers = NULL;
 	free(data->forks);
 	data->forks = NULL;
 	free(data);
+	free(monitor);
 }

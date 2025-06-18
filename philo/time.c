@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/18 15:52:32 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/18 16:45:25 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	usleep_wrapper(long duration, t_data *data)
 	duration = duration * 1000;
 	while (rest <= duration)
 	{
+		usleep(100);
 		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);

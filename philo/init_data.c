@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 17:59:44 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/18 16:33:21 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ t_philo	*init_philo(int id, t_data *data)
 	return (philo);
 }
 
-void	destroy_data_mutex(t_data *data)
+void	destroy_data_mutex(t_monitor *data)
 {
 	int	i;
 
@@ -81,12 +81,12 @@ void	destroy_data_mutex(t_data *data)
 		return ;
 	if (!data->philosophers)
 		return ;
-	pthread_mutex_destroy(&data->print_lock);
-	pthread_mutex_destroy(&data->death_lock);
+	pthread_mutex_destroy(&data->data->print_lock);
+	pthread_mutex_destroy(&data->data->death_lock);
 	while (data->philosophers[++i])
 	{
 		pthread_mutex_destroy(&data->philosophers[i]->num_meals_lock);
 		pthread_mutex_destroy(&data->philosophers[i]->eat_time_lock);
-		pthread_mutex_destroy(&data->forks[i]);
+		pthread_mutex_destroy(&data->data->forks[i]);
 	}
 }
