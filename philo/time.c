@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 17:59:56 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/18 15:52:32 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,11 @@ int	usleep_wrapper(long duration, t_data *data)
 		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
-		if (data->philo_died)
+		if (pthread_mutex_lock(&data->death_lock) != 0)
 			return (-1);
+		if (data->philo_died)
+			return (pthread_mutex_unlock(&data->death_lock), -1);
+		pthread_mutex_unlock(&data->death_lock);
 	}
 	return (0);
 }
