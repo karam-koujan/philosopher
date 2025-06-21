@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/18 16:35:35 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/21 15:46:05 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ typedef struct s_data
 	int				eat_num;
 	long			start_time;
 	int				philo_died;
-	// t_philo			**philosophers;
 	pthread_t		monitor;
 	pthread_mutex_t	*forks;
 }				t_data;

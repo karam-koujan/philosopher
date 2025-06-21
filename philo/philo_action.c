@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo_action.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/15 13:36:42 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/21 17:30:05 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 int	eat(t_philo *philo_data)
 {
-	if (print_message(philo_data, 1) == -1)
-		return (-1);
 	if (pthread_mutex_lock(&philo_data->eat_time_lock) != 0)
 		return (-1);
 	philo_data->eat_time = get_timestamp(philo_data->data->start_time);
 	if (pthread_mutex_unlock(&philo_data->eat_time_lock) != 0)
+		return (-1);
+	if (print_message(philo_data, 1) == -1)
 		return (-1);
 	if (usleep_wrapper(philo_data->data->time_to_eat, \
 		philo_data->data) == -1)

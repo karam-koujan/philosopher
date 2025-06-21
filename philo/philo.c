@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/18 16:40:33 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/21 16:57:59 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ int	stop_eating(t_monitor *philo_data)
 void	start_simulation(t_monitor *monitor)
 {
 	int				i;
-	t_philo			*philo;
 	t_data			*data;
 
 	data = monitor->data;
@@ -62,19 +61,17 @@ void	start_simulation(t_monitor *monitor)
 	data->start_time = gettimeofday_wrapper();
 	while (++i < data->num_philos)
 	{
-		philo = monitor->philosophers[i];
-		if (pthread_create(&monitor->philosophers[i]->thread, NULL, \
-				&philo_func, philo) != 0)
-			data->num_philos = i;
+		pthread_create(&monitor->philosophers[i]->thread, NULL, \
+				&philo_func, monitor->philosophers[i]);
 	}
-	if (pthread_create(&data->monitor, NULL, &monitoring, monitor) != 0)
-		return ;
 	i = -1;
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(monitor->philosophers[i]->thread, NULL) != 0)
 			continue ;
 	}
+	if (pthread_create(&data->monitor, NULL, &monitoring, monitor) != 0)
+		return ;
 	pthread_join(data->monitor, NULL);
 }
 
@@ -85,11 +82,13 @@ int	run(t_monitor *monitor)
 	data = monitor->data;
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
 		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
-	free(data->forks), free(monitor->philosophers), free(data), 1);
+	free(data->forks), free(monitor->philosophers), free(data), \
+	free(monitor), 1);
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
 		return (pthread_mutex_destroy(&data->print_lock), \
 		destroy_mutex_arr(data->forks, data->num_philos - 1), \
-		free(data->forks), free(monitor->philosophers), free(data), 1);
+		free(data->forks), free(monitor->philosophers), free(data), \
+		free(monitor), 1);
 	start_simulation(monitor);
 	clean_up(monitor);
 	return (0);
@@ -105,7 +104,7 @@ int	main(int ac, char **av)
 	data = malloc(sizeof(t_data));
 	monitor = malloc(sizeof(t_monitor));
 	if (!data || !monitor)
-		return (1);
+		return (free(data), free(monitor), 1);
 	data->num_philos = ft_atoi(av[1]);
 	data->time_to_die = ft_atoi(av[2]);
 	data->time_to_eat = ft_atoi(av[3]);
@@ -120,6 +119,6 @@ int	main(int ac, char **av)
 	monitor->data = data;
 	if (!monitor->philosophers || !data->forks)
 		return (free_philosophers(monitor->philosophers), \
-			free(data->forks), free(data), 1);
+			free(data->forks), free(data), free(monitor), 1);
 	return (run(monitor));
 }

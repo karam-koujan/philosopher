@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/18 16:45:25 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/21 17:36:58 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ long	get_timestamp(long start_time)
 	return (time - start_time);
 }
 
-int	get_passed_time(t_time *prev, t_time *curr)
+long	get_passed_time(t_time *prev, t_time *curr)
 {
 	long	time;
 
