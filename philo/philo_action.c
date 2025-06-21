@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/21 17:30:05 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/21 17:44:56 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,9 @@ int	eat(t_philo *philo_data)
 		philo_data->data) == -1)
 		return (pthread_mutex_unlock(get_fork(philo_data, 1)), \
 		pthread_mutex_unlock(get_fork(philo_data, 0)), -1);
-	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
-		return (-1);
 	if (pthread_mutex_unlock(get_fork(philo_data, 0)) != 0)
+		return (-1);
+	if (pthread_mutex_unlock(get_fork(philo_data, 1)) != 0)
 		return (-1);
 	if (pthread_mutex_lock(&philo_data->num_meals_lock) != 0)
 		return (-1);

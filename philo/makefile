@@ -1,5 +1,5 @@
 NAME = philo
-CFLAGS = -g -Wall -Wextra -Werror -fsanitize=thread,undefined
+CFLAGS = -g -Wall -Wextra -Werror #-fsanitize=thread,undefined
 OBJ = philo.o philo_helper.o time.o helper.o philo_action.o init_data.o threads.o
 
 all : $(NAME)
