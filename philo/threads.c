@@ -17,7 +17,7 @@ void	*philo_func(void *data)
 	t_philo	*philo_data;
 
 	philo_data = data;
-	if (philo_data->data->num_philos == 1)
+	if (philo_data->data->num_philos == 1 && !is_dead(philo_data->data))
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
 		usleep(100);
@@ -49,7 +49,7 @@ void	*monitoring(void *data)
 	philo_data = data;
 	global_d = philo_data->data;
 	i = -1;
-	while (stop_eating(philo_data) == 0)
+	while (stop_eating(philo_data) == 0 && !is_dead(global_d))
 	{
 		while (++i < global_d->num_philos)
 		{

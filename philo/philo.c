@@ -51,27 +51,35 @@ int	stop_eating(t_monitor *philo_data)
 	return (end);
 }
 
-void	start_simulation(t_monitor *monitor)
+int	start_simulation(t_monitor *monitor)
 {
 	int				i;
 	t_data			*data;
+	int				err_flag;
 
+	err_flag = 0;
 	data = monitor->data;
 	i = -1;
 	data->start_time = gettimeofday_wrapper();
 	while (++i < data->num_philos)
 	{
-		pthread_create(&monitor->philosophers[i]->thread, NULL, \
-				&philo_func, monitor->philosophers[i]);
+		if (pthread_create(&monitor->philosophers[i]->thread, NULL, \
+				&philo_func, monitor->philosophers[i]) != 0)
+				err_flag = 0;
 	}
 	i = -1;
-	pthread_create(&data->monitor, NULL, &monitoring, monitor);
+	if (pthread_create(&data->monitor, NULL, &monitoring, monitor) != 0)
+		err_flag = 1;
+	
 	while (++i < data->num_philos)
 	{
 		if (pthread_join(monitor->philosophers[i]->thread, NULL) != 0)
-			continue ;
+			err_flag = 1;
 	}
-	pthread_join(data->monitor, NULL);
+	if (pthread_join(data->monitor, NULL) != 0)
+		err_flag = 1;
+	
+	return (err_flag);
 }
 
 int	run(t_monitor *monitor)

@@ -52,7 +52,7 @@ int	print_message(t_philo *philo_data, int type)
 	else if (type == 3 && !philo_data->data->philo_died)
 		printf("%ld	%i is thinking\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
-	else if (type == 4)
+	else if (type == 4 && philo_data->data->philo_died == 1)
 		printf("%ld	%i died\n", \
 		get_timestamp(philo_data->data->start_time), philo_data->id);
 	if (pthread_mutex_unlock(&(philo_data->data->death_lock)) != 0)
