@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/21 15:46:05 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/24 20:01:09 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,6 @@ void			single_philo(t_philo *data);
 void			destroy_mutex_arr(pthread_mutex_t *arr, int i);
 void			clean_up(t_monitor *monitor);
 int				run(t_monitor *monitor);
+void			stop_philos(t_data *data);
+int				init_threads(t_monitor *monitor, int *num_philos);
 #endif

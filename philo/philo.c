@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/22 16:29:15 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/24 20:00:10 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,37 +55,32 @@ int	start_simulation(t_monitor *monitor)
 {
 	int				i;
 	t_data			*data;
-	int				err_flag;
+	int				num_philos;
+	int				status;
 
-	err_flag = 0;
+	status = 0;
 	data = monitor->data;
+	num_philos = data->num_philos;
 	i = -1;
 	data->start_time = gettimeofday_wrapper();
-	while (++i < data->num_philos)
-	{
-		if (pthread_create(&monitor->philosophers[i]->thread, NULL, \
-				&philo_func, monitor->philosophers[i]) != 0)
-				err_flag = 0;
-	}
-	i = -1;
-	if (pthread_create(&data->monitor, NULL, &monitoring, monitor) != 0)
-		err_flag = 1;
-	
-	while (++i < data->num_philos)
+	status = init_threads(monitor, &num_philos);
+	while (++i < num_philos)
 	{
 		if (pthread_join(monitor->philosophers[i]->thread, NULL) != 0)
-			err_flag = 1;
+			return (1);
 	}
-	if (pthread_join(data->monitor, NULL) != 0)
-		err_flag = 1;
-	
-	return (err_flag);
+	if (!status && num_philos == data->num_philos \
+		&& pthread_join(data->monitor, NULL) != 0)
+		return (1);
+	return (status);
 }
 
 int	run(t_monitor *monitor)
 {
 	t_data		*data;
+	int			status;
 
+	status = 0;
 	data = monitor->data;
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
 		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
@@ -96,9 +91,9 @@ int	run(t_monitor *monitor)
 		destroy_mutex_arr(data->forks, data->num_philos - 1), \
 		free(data->forks), free(monitor->philosophers), free(data), \
 		free(monitor), 1);
-	start_simulation(monitor);
+	status = start_simulation(monitor);
 	clean_up(monitor);
-	return (0);
+	return (status);
 }
 
 int	main(int ac, char **av)

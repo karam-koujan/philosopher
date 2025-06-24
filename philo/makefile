@@ -1,6 +1,6 @@
 NAME = philo
-CFLAGS = -Wall -Wextra -Werror
-OBJ = philo.o philo_helper.o time.o helper.o philo_action.o init_data.o threads.o
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address
+OBJ = philo.o philo_helper.o time.o helper.o philo_action.o init_data.o threads.o threads_helper.o
 
 all : $(NAME)
 
