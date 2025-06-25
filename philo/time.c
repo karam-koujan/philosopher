@@ -37,21 +37,17 @@ int	usleep_wrapper(long duration, t_data *data)
 	t_time		prev;
 	long		rest;
 
+	(void)data;
 	if (gettimeofday(&prev, NULL) == -1)
 		return (-1);
 	rest = 0;
 	duration = duration * 1000;
 	while (rest <= duration)
 	{
-		usleep(100);
+		usleep(200);
 		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
-		if (pthread_mutex_lock(&data->death_lock) != 0)
-			return (-1);
-		if (data->philo_died)
-			return (pthread_mutex_unlock(&data->death_lock), -1);
-		pthread_mutex_unlock(&data->death_lock);
 	}
 	return (0);
 }

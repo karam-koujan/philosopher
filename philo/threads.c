@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1 && !is_dead(philo_data->data))
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep(100);
+		usleep(500);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -48,9 +48,9 @@ void	*monitoring(void *data)
 
 	philo_data = data;
 	global_d = philo_data->data;
-	i = -1;
 	while (stop_eating(philo_data) == 0 && !is_dead(global_d))
 	{
+		i = -1;
 		while (++i < global_d->num_philos)
 		{
 			if (get_last_meal_time(philo_data, i) >= global_d->time_to_die)
@@ -64,7 +64,7 @@ void	*monitoring(void *data)
 				return (NULL);
 			}
 		}
-		i = -1;
+		usleep(100);
 	}
 	return (NULL);
 }
