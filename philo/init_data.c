@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/18 16:33:21 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/26 14:32:48 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,18 @@ void	destroy_data_mutex(t_monitor *data)
 		return ;
 	pthread_mutex_destroy(&data->data->print_lock);
 	pthread_mutex_destroy(&data->data->death_lock);
+	destroy_philo_mutex(data);
+}
+
+void	destroy_philo_mutex(t_monitor *data)
+{
+	int	i;
+
+	i = -1;
+	if (!data)
+		return ;
+	if (!data->philosophers)
+		return ;
 	while (data->philosophers[++i])
 	{
 		pthread_mutex_destroy(&data->philosophers[i]->num_meals_lock);

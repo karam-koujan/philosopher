@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 14:12:21 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/21 17:44:56 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/26 14:06:36 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	think(t_philo *philo_data)
 {
 	if (print_message(philo_data, 3) == -1)
 		return (-1);
+	if (philo_data->data->num_philos % 2 != 0)
+		usleep(200);
 	return (0);
 }
 
