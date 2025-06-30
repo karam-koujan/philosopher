@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/21 18:03:53 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/30 15:58:24 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,12 @@ int	usleep_wrapper(long duration, t_data *data)
 	duration = duration * 1000;
 	while (rest <= duration)
 	{
-		usleep(200);
 		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
+		if (has_sim_stopped(data))
+			return (-1);
 		rest = get_passed_time(&prev, &curr);
+		usleep(100);
 	}
 	return (0);
 }

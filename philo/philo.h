@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:35:19 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/26 14:31:47 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/30 15:56:23 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,5 @@ int				run(t_monitor *monitor);
 void			stop_philos(t_data *data);
 int				init_threads(t_monitor *monitor, int *num_philos);
 void			destroy_philo_mutex(t_monitor *data);
+int				has_sim_stopped(t_data *data);
 #endif

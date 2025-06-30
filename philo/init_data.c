@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/26 14:32:48 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/30 15:40:21 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,9 +74,6 @@ t_philo	*init_philo(int id, t_data *data)
 
 void	destroy_data_mutex(t_monitor *data)
 {
-	int	i;
-
-	i = -1;
 	if (!data)
 		return ;
 	if (!data->philosophers)

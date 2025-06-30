@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/26 14:20:51 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/30 16:03:24 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	*monitoring(void *data)
 				return (NULL);
 			}
 		}
-		usleep(100);
+		usleep(1000);
 	}
 	return (NULL);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads_helper.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:59:47 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/24 20:05:24 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/06/30 16:06:14 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,16 @@ int	init_threads(t_monitor *monitor, int *num_philos)
 		status = 1;
 	}
 	return (status);
+}
+
+int	has_sim_stopped(t_data *data)
+{
+	int	is_stopped;
+
+	is_stopped = 0;
+	pthread_mutex_lock(&data->death_lock);
+	if (data->philo_died)
+		is_stopped = 1;
+	pthread_mutex_unlock(&data->death_lock);
+	return (is_stopped);
 }
