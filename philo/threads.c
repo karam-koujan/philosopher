@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/30 16:03:24 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/01 11:53:25 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	*monitoring(void *data)
 
 	philo_data = data;
 	global_d = philo_data->data;
-	while (stop_eating(philo_data) == 0 && !is_dead(global_d))
+	while (stop_eating(philo_data) == 0)
 	{
 		i = -1;
 		while (++i < global_d->num_philos)
