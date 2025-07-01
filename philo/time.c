@@ -44,9 +44,9 @@ int	usleep_wrapper(long duration, t_data *data)
 	duration = duration * 1000;
 	while (rest <= duration)
 	{
-		if (gettimeofday(&curr, NULL) == -1)
-			return (-1);
 		if (has_sim_stopped(data))
+			return (-1);
+		if (gettimeofday(&curr, NULL) == -1)
 			return (-1);
 		rest = get_passed_time(&prev, &curr);
 		usleep(100);

@@ -55,8 +55,6 @@ int	think(t_philo *philo_data)
 {
 	if (print_message(philo_data, 3) == -1)
 		return (-1);
-	if (philo_data->data->num_philos % 2 != 0)
-		usleep(200);
 	return (0);
 }
 

@@ -63,8 +63,8 @@ void	*monitoring(void *data)
 				print_message(philo_data->philosophers[i], 4);
 				return (NULL);
 			}
+			usleep(500);
 		}
-		usleep(1000);
 	}
 	return (NULL);
 }
