@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/07/03 21:55:21 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 22:29:13 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1)
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep_wrapper(philo_data->data->time_to_eat, philo_data->data);
+		usleep_wrapper(philo_data->data->time_to_eat / 2, philo_data->data);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -53,7 +53,7 @@ void	*monitoring(void *data)
 		i = -1;
 		while (++i < global_d->num_philos)
 		{
-			if (get_last_meal_time(philo_data, i) > global_d->time_to_die)
+			if (get_last_meal_time(philo_data, i) >= global_d->time_to_die)
 			{
 				if (pthread_mutex_lock(&global_d->death_lock) != 0)
 					return (NULL);
