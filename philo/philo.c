@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/25 09:23:37 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/26 14:37:50 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:49:56 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,10 @@ int	run(t_monitor *monitor)
 	status = 0;
 	data = monitor->data;
 	if (pthread_mutex_init(&data->print_lock, NULL) != 0)
-		return (destroy_mutex_arr(data->forks, data->num_philos - 1), \
-	destroy_philo_mutex(monitor), free(data->forks), \
+		return (destroy_philo_mutex(monitor), free(data->forks), \
 	free(monitor->philosophers), free(data), free(monitor), 1);
 	if (pthread_mutex_init(&data->death_lock, NULL) != 0)
 		return (pthread_mutex_destroy(&data->print_lock), \
-		destroy_mutex_arr(data->forks, data->num_philos - 1), \
 		destroy_philo_mutex(monitor), free(data->forks), \
 		free(monitor->philosophers), free(data), \
 		free(monitor), 1);
@@ -122,7 +120,8 @@ int	main(int ac, char **av)
 	data->forks = init_forks(data->num_philos);
 	monitor->data = data;
 	if (!monitor->philosophers || !data->forks)
-		return (free_philosophers(monitor->philosophers), \
+		return (destroy_philo_mutex(monitor), \
+			free_philosophers(monitor->philosophers), \
 			free(data->forks), free(data), free(monitor), 1);
 	return (run(monitor));
 }

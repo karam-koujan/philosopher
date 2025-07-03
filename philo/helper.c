@@ -6,7 +6,7 @@
 /*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:12:51 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/24 19:56:55 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:45:09 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@ void	free_philosophers(t_philo **philos)
 	if (!philos)
 		return ;
 	while (philos[++i])
+	{
 		free(philos[i]);
+	}
 	free(philos);
 }
 

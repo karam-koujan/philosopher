@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_data.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:13:50 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/30 15:40:21 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:47:34 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,16 +86,22 @@ void	destroy_data_mutex(t_monitor *data)
 void	destroy_philo_mutex(t_monitor *data)
 {
 	int	i;
+	int	j;
 
+	j = -1;
 	i = -1;
 	if (!data)
 		return ;
+	if (data->data->forks != NULL)
+	{
+		while (++j < data->data->num_philos)
+			pthread_mutex_destroy(&data->data->forks[j]);
+	}
 	if (!data->philosophers)
 		return ;
 	while (data->philosophers[++i])
 	{
 		pthread_mutex_destroy(&data->philosophers[i]->num_meals_lock);
 		pthread_mutex_destroy(&data->philosophers[i]->eat_time_lock);
-		pthread_mutex_destroy(&data->data->forks[i]);
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   threads.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 15:16:40 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/07/01 11:53:25 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:52:28 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	*philo_func(void *data)
 	if (philo_data->data->num_philos == 1)
 		return (single_philo(philo_data), NULL);
 	if (philo_data->id % 2 == 0)
-		usleep(500);
+		usleep_wrapper(philo_data->data->time_to_eat, philo_data->data);
 	while (!is_dead(philo_data->data))
 	{
 		if (take_fork(philo_data) == -1)
@@ -48,7 +48,7 @@ void	*monitoring(void *data)
 
 	philo_data = data;
 	global_d = philo_data->data;
-	while (stop_eating(philo_data) == 0)
+	while (stop_eating(philo_data) == 0 && !is_dead(global_d))
 	{
 		i = -1;
 		while (++i < global_d->num_philos)
@@ -63,7 +63,6 @@ void	*monitoring(void *data)
 				print_message(philo_data->philosophers[i], 4);
 				return (NULL);
 			}
-			usleep(500);
 		}
 	}
 	return (NULL);

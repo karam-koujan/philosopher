@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   time.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kkoujan <kkoujan@student.1337.ma>          +#+  +:+       +#+        */
+/*   By: kkoujan <kkoujan@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/30 11:10:06 by kkoujan           #+#    #+#             */
-/*   Updated: 2025/06/30 15:58:24 by kkoujan          ###   ########.fr       */
+/*   Updated: 2025/07/03 21:18:58 by kkoujan          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,26 @@ long	get_timestamp(long start_time)
 	return (time - start_time);
 }
 
-long	get_passed_time(t_time *prev, t_time *curr)
+long	get_passed_time(void)
 {
-	long	time;
+	t_time	time;
 
-	time = ((curr->tv_sec - prev->tv_sec) * 1000000) + \
-		(curr->tv_usec - prev->tv_usec);
-	return (time);
+	if (gettimeofday(&time, NULL) == -1)
+		return (-1);
+	return ((time.tv_sec * 1000000) + time.tv_usec);
 }
 
 int	usleep_wrapper(long duration, t_data *data)
 {
-	t_time		curr;
-	t_time		prev;
-	long		rest;
+	long	start;
 
-	(void)data;
-	if (gettimeofday(&prev, NULL) == -1)
-		return (-1);
-	rest = 0;
+	start = get_passed_time();
 	duration = duration * 1000;
-	while (rest <= duration)
+	while (get_passed_time() - start < duration)
 	{
 		if (has_sim_stopped(data))
 			return (-1);
-		if (gettimeofday(&curr, NULL) == -1)
-			return (-1);
-		rest = get_passed_time(&prev, &curr);
-		usleep(100);
+		usleep(500);
 	}
 	return (0);
 }
